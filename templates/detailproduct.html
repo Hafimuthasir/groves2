@@ -1,0 +1,78 @@
+{% extends 'homebase.html'  %}
+{% load static %}
+
+{% block content %}
+
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="{% static '/zoomstyle.css'%}">
+
+    <br><br><br><br>
+	<div id="content-wrapper">
+
+		<div class="column">
+			<div id="img-container" >
+				<div id="lens" style="width:200px;height:150px;border:0px" class="shadow p-3 mb-5 bg-white rounded"></div>
+				<img id="featured" class="shadow p-3 mb-5 bg-white rounded" src="{{ datas.image.url }}" style="border:0px">
+			</div>
+			<div id="slide-wrapper" class="shadow p-3 mb-5 bg-white rounded">
+				<img id="slideLeft" class="arrow" src="{% static 'images2/icons/arrow-left.png'%}">
+                <br>
+				<div id="slider" >
+					<img class="thumbnail active" src="{{ datas.image.url }}">
+                    {% if datas.image2 %}
+					<img class="thumbnail" src="{{datas.image2.url}}">
+                    {% endif %}
+
+                    {% if datas.image3 %}
+					<img class="thumbnail" src="{{datas.image3.url}}">
+                    {% endif %}
+
+                    {% if datas.image4 %}
+					<img class="thumbnail" src="{{datas.image4.url}}">
+                    {% endif %}
+
+				</div>
+
+				<img id="slideRight" class="arrow" src="{% static 'images2/icons/arrow-right.png'%}">
+			</div>
+		</div>
+
+		<div class="column" style="margin-bottom:200px;">
+			<h3 >{{datas.productname}}</h3>
+			<hr>
+			{% if datas.total_disprice %}
+			<h6><del>Rs.{{datas.price}}.00</del></h6>
+            <h5>Rs.{{datas.dis_price}}.00</h5>
+			
+			<span>{{datas.disperc}}</span>
+			{% else %}
+			<h5>Rs.{{datas.price}}.00</h5>
+			{% endif %}
+
+			{% if datas.stock_status == False %} 
+			<p class="text-danger">Only {{datas.stocks}} Left</p>
+			{% endif %}
+			<p>{{datas.description}}</p>
+            <form method="POST">
+                {%csrf_token%}
+			{% comment %} <input value=1 type="number"> {% endcomment %}
+			{% if incart == True %}
+			<p style="color:blue;">Item already in your Cart</p>
+			<a href="{% url 'cartlist' %}" class="btn btn-success">Go to Cart</a>
+            {% else %}
+			<input type="submit" name="cartbt" class="btn btn-primary" value="Add to Cart">
+			{% endif %}
+			<input type="submit" name="wishlist_button" class="btn btn-danger" value="Add to wishlist">
+            </form>
+        </div>
+        
+	</div>
+    <br>
+	<script type="text/javascript" src="{% static '/zoomslider.js' %}" ></script>
+	<script type="text/javascript" src="{% static '/zoomscript.js' %}" ></script>
+
+
+
+{% endblock %}

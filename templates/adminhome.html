@@ -1,0 +1,207 @@
+{% extends 'base.html'  %}
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'css/adminhome.css' %}"> {% endcomment %}
+</head>
+<body>
+  
+  <div class="adminhome container" style="margin-left: 40%;">  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script> 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    {% block content %}
+    <h1>Admin Home</h1>
+
+{% load static %}
+     
+       
+ 
+<main>
+   
+      <h3 class="page-title"> Charts of Sales </h3>
+              {% comment %} <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Charts</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Chart of sales</li>
+                </ol>
+              </nav> {% endcomment %}
+            </div>
+            <br>
+            <a href="{% url 'sales' %}" class="btn btn-primary" style="width:150px;">Sales Report</a>
+            <br>
+            <div class="row">
+              
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Orders Per Month</h4>
+                    <canvas id="myChart" style="height:250px"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              
+                <div class="col-lg-6 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Orders per year</h4>
+                      <canvas id="myChart1" style="height:250px"></canvas>
+                    </div>
+                  </div>
+                </div>
+
+                
+                  <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Orders by day</h4>
+                        <canvas id="myChart2" style="height:250px"></canvas>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title">Payment method used</h4>
+                        <canvas id="myChart3" style="height:250px"></canvas>
+                      </div>
+                    </div>
+                  </div>
+
+            <a href="{% url 'downexel' %}" style="width:25%;" class="btn btn-primary">Download Sales report in Excel</a><br>
+            &nbsp<a href="{% url 'exportsalestopdf' %}" style="width:25%;" class="btn btn-primary">Download Sales report in PDF</a><br>
+            
+
+
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+            <script type="text/javascript">
+              const labels = {{ MonthNumber | safe }};
+            
+              const data = {
+                labels: labels,
+                datasets: [{
+                  label: 'Orders Per Month',
+                  backgroundColor: 'rgb(255, 0, 0)',
+                  borderColor: 'rgb(0, 0, 0)',
+                  borderWidth: 2,
+                  data: {{ TotalOrders }},
+                  }]
+                };
+            
+              const config = {
+                type: 'line',
+                data: data,
+                options: {}
+              };
+            
+              const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+              );
+            
+              // year  chart
+              const labels1 = {{ YearNumber | safe }};
+            
+              const data1 = {
+                labels: labels1,
+                datasets: [{
+                  label: 'Orders Per year',
+                  backgroundColor: [
+                    'rgba(255, 205, 86)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(201, 203, 207, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                  'rgba(54, 162, 235, 0.5)',
+                  ],
+                  borderColor: 'rgb(0, 0, 0)',
+                  borderWidth: 2,
+                  data: {{ totaltyearorders }},
+                  }]
+                };
+            
+              const config1 = {
+                type: 'pie',
+                data: data1,
+                options: {}
+              };
+            
+              const myChart1 = new Chart(
+                document.getElementById('myChart1'),
+                config1
+              );
+              //perday
+              const labels2 = {{ DayNumber | safe }};
+            
+              const data2 = {
+                labels: labels2,
+                datasets: [{
+                  label: 'Orders Placed Today',
+                  backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                  borderColor: 'rgb(255, 99, 132)',
+                  barPercentage: .2,  
+                  barThickness: 45,
+                  data: {{ totaldayorder }},
+                  }]
+                };
+            
+              const config2 = {
+                type: 'bar',
+                data: data2,
+                options: {}
+              };
+            
+              const myChart2 = new Chart(
+                document.getElementById('myChart2'),
+                config2
+              );
+              //payment
+              const labels3 = ['COD', 'Paypal', 'Razorpay'];
+            
+              const data3 = {
+                labels: labels3,
+                datasets: [{
+                  label: 'Payment Methods Usage %',
+                  backgroundColor: [
+                  'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+        
+                  ],
+                  borderColor: 'rgb(0, 0, 0)',
+                  data: [{{ cod }}, {{ paypal }}, {{ raz }}]
+                  }]
+                };
+            
+              const config3 = {
+                type: 'bar',
+                data: data3,
+                options: {}
+              };
+            
+              const myChart3 = new Chart(
+                document.getElementById('myChart3'),
+                config3
+              );
+            </script>
+      {% endblock %}
+      {% comment %} {% block CustomScripts %}
+
+      
+      
+      
+    {% endblock %} {% endcomment %}
+  </div>
+  
+</body>
+</html>

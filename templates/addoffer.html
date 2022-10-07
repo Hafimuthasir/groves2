@@ -1,0 +1,153 @@
+{% extends 'base.html'  %}
+{% block content %}
+
+
+
+<div class="col-md-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+      Productname:<p>{{add.productname}}</p>
+      Product MRP:<p>Rs. {{add.price}}</p>
+      Offers applied on this product:<br>
+      
+      {% if add.dis_price %}
+      <label class="text-success">Category offer applied on this product.</label> <a href="#" >See Details</a>
+      {% endif %}
+      {% if add.dis_proprice %}
+      <label class="text-success">Product offer applied on this product</label><br>
+      {% endif %}
+      {% if add.total_disprice %}
+      <label>Price after offer applied : </label> Rs. {{add.total_disprice}}  <label class="text-muted"> (the best offer is active)</label><br>
+      {% else %}
+      <label class="text-danger">Currently no offers applied on this product</label>
+      {% endif %}
+      </div>
+    <div class="col d-flex" style="align-items:center;justify-content:center;">
+      {% if add.total_disprice %}
+      <div style="background-color:blue;" class="shadow p-3 mb-5 bg-danger rounded">
+      <h6 style="text-align:center;" class="text-white">If multiple offers applied on a product<br>The best offer will be active.</h6>
+      </div>
+      {% endif %}
+    </div>
+    
+    </div>
+    </div></div></div>
+
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Add Product Offer</h4>
+        <p class="card-description">  </p>
+        <form method = 'POST' class="forms-sample">
+          {%csrf_token%} 
+
+          {% comment %} <div class="form-group row">
+            <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Category</label>
+            <div class="col-sm-9">
+            <select name="category" class="form-control" id="exampleFormControlSelect1">
+              {% for i in datas %}
+              <option value="{{i.id}}">{{i.categoryname}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          </div> {% endcomment %}
+
+
+          <div class="form-group row">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Add Discount By :</label>
+            <div class="col-sm-9">
+
+              Percentage : <input class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" />
+          
+              
+          
+{% comment %} 
+              Percentage : <input id="OtherCheckBox" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+              Price : <input id="OtherCheckBox2" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+              <input id="OtherTextBox" class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" style="display:none" />
+          
+              
+              <input id="OtherTextBox2" class="form-control" name="disprice" type="text" placeholder="Enter the Discount Price" style="display:none" />
+           {% endcomment %}
+            </div>
+          </div>
+
+          {% comment %} <div class="form-group row">
+            <label for="exampleInputMobile" class="col-sm-3 col-form-label">Discount Price</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="description" required id="exampleInputMobile" placeholder="Product Description">
+            </div>
+          </div>
+        {% endcomment %}
+          <button type="submit" class="btn btn-primary mr-2" name="cate_choice">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% if add.total_disprice%}
+  &nbsp&nbsp&nbsp&nbsp
+  {% comment %} <a href="{% url 'clear_all_offer' add.id %}" class="btn btn-danger">Clear all offers on this product</a> {% endcomment %}
+  
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+    Clear all offers on the product
+  </button>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure want to remove ?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Both product offer and category offer will be removed on this product
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+          <a href="{% url 'clear_all_offer' add.id %}" class="btn btn-danger">Clear</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% endif %}
+  {% if add.dis_price %}
+  {% comment %} <a href="{% url 'clear_cate_offer' add.id %}" class="btn btn-warning">Clear category offer on this product</a> {% endcomment %}
+  {% endif %}
+  {% if add.dis_proprice %}
+  <a href="{% url 'clear_pro_offer' add.id %}" class="btn btn-info">Clear product offer on this product</a>
+  {% endif %}
+  <script type="text/javascript">
+
+
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#myInput').trigger('focus')
+    })
+
+
+    function toggleOtherTextboxVisible()
+    {
+        var check = document.getElementById('OtherCheckBox');
+        if (check.checked) {
+            document.getElementById('OtherTextBox').style.display = 'block';
+        }
+        else
+            document.getElementById('OtherTextBox').style.display = 'none';
+
+        var check = document.getElementById('OtherCheckBox2');
+        if (check.checked) {
+                document.getElementById('OtherTextBox2').style.display = 'block';
+        }
+        else
+                document.getElementById('OtherTextBox2').style.display = 'none';
+
+    }
+</script>
+
+{% endblock %}

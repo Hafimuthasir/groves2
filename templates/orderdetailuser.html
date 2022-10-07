@@ -1,0 +1,64 @@
+{% extends 'homebase.html'  %}
+{% load static %}
+
+{% block content %}
+<br><br><br><br>
+<div class="container">
+    <div class="row">
+      <div class="col"> 
+        <a href="{% url 'myorders'%}" class="btn btn-primary"> << Back to My Orders</a>
+        <hr>
+        <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 18rem; height:24rem;" >
+            <div class="card-body" style="line-spacing:1px;">
+              <h5 class="card-title">Delivery address :</h5>
+              {% comment %} <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> {% endcomment %}
+              <p class="card-text">{{address.buyer_name}}
+              {{address.address}}<br>
+              {{address.city}}<br>
+              {{address.state}}<br>
+              {{address.country}}<br>
+             {{address.pincode}}<br>
+              {{address.buyer_phone}}</p>
+              {% comment %} <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a> {% endcomment %}
+            </div>
+          </div><br>
+          
+      </div>
+      <div class="col-6">
+      
+        <div class="card shadow p-3 mb-5 bg-white rounded" style="">
+            <img class="card-img-top" src="{{ordpro.product.image.url}}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{ordpro.product.productname}}</h5>
+              {{ordpro.product.description}}<br>
+              
+              {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+            </div>
+          </div>
+      </div>
+      <div class="col">
+     
+          <div class="card shadow p-3 mb-5 bg-white rounded">
+              <div class="card-body">
+              <h5 class="card-title">Order-Id : {{ordd.order_number}}</h5>
+              
+              <label class="card-text"style="font-weight:light;">Created at: </label>
+              <p>{{ordpro.created_at}}</p>
+              <br>
+              <p>Status:</p>
+              <label class="text-success">{{ordpro.status}}</label>
+              <p>Product Price:</p>
+             
+              &nbsp&nbsp&nbsp&nbsp<label style="font-weight:1px;">&nbspRs. {{ordpro.product.dis_price}}.00</label>
+              <hr style="background-color:black;">  
+              <br>
+              &nbsp&nbsp <a href="{% url 'download' ordpro.id %}" class="btn btn-info ">Download invoice </a>
+              
+              
+      </div>
+      </div>
+          
+    </div>
+    <br>
+{% endblock %}

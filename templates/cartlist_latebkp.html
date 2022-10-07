@@ -1,0 +1,321 @@
+ <!-- Cart Start -->
+ {% block content %}
+ <div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5 ">
+            <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Products</th>
+                        <th> </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                        <th>Price</th>
+                        <th></th>
+                        <th>Quantity</th>
+
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+
+            </table>
+                {% for i in cartdat %}
+                <div class="product_data">
+
+                    <table class="table table-light table-borderless table-hover text-center mb-2">
+                        {% if  cartdat  %}
+                        <tbody>
+
+                                <tr >
+
+                                    <td class="align-middle "><img src="{{i.product.image.url}}" alt="" style="width: 50px;"> </td>
+                                    <td class="align-middle w-25 ">{{i.productid.productName}}&nbsp;  &#8377;</td>
+                                    <td class="align-middle "><input type="text" class="product_price border-0" style="width:5rem;"  readonly value="{{i.productid.total_disprice}}"></td>
+
+                                    <td class="align-middle w-25">
+                                        <div class="input-group  mx-auto " style="width: 100px;">
+                                                    <div class="input-group-btn mt-1">
+                                                        <a href="" data-pid="{{i.productid.id}}" data-cid="{{i.id}}" class="decrement-btn btn btn-sm btn-primary btn-minus" >
+                                                            <i class="fa fa-minus"></i>
+                                                        </a>
+                                                    </div>
+                                            <input type="text"  class=" qty-input form-control form-control-sm bg-secondary border-0 text-center " value="{{i.quantity}}">
+                                                    <div class="input-group-btn mt-1">
+                                                        {% comment %} {% url 'add_cart' i.productid.id %} {% endcomment %}
+                                                        <a href="" data-value="{{i.productid.id}}" class="increment-btn btn btn-sm btn-primary btn-plus "  >
+                                                            <i class="fa fa-plus"></i>
+                                                        </a>
+                                                    </div>
+                                        </div>
+                                    </td>
+
+<!--                                        <td class="align-middle ">&#8377;<input type="text" value="{{total}}" data-value="{{cart_item.total}}" class="item_total border-0" style="width:5rem;" readonly></td>-->
+                                        <td class="align-middle" ><a href="" class="btn btn-sm btn-danger"  data-bs-toggle="modal" data-bs-target="#exampleModal{{i.productid.id}}"><i class="fa fa-solid fa-trash"></i></a></td>
+
+
+
+                                </tr>
+                        </tbody>
+<!--                            alert for removeing cart items-->
+{% comment %} i.productid.id {% endcomment %}
+                                <form action="{% url 'remove_cart' i.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="modal fade" id="exampleModal{{i.productid.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Remove Item</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body">
+                                                Are you sure you want to remove this item?
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+                                                <button type="submit" class="btn btn-primary">REMOVE</button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        </form>
+                          {% else %}
+                          <tbody class="align-middle">
+
+                                 <tr>
+                                <td></td>
+                                <td></td>
+                                <td> <h5>Your cart is empty </h5></td>
+                               <td> <a href="{% url 'home' %}"><button class="btn btn-dark">HOME</button></a></td>
+                                </tr>
+                         </tbody>
+                        {% endif %}
+                        </table>
+                    </div>
+                {% endfor %}
+
+
+        </div>
+        {% comment %} <div class=" col-lg-4">
+            <form class="mb-30" action="{% url 'coupon_code' %}" method="post">
+                 {% csrf_token %}
+                <div class="input-group">
+                     
+                     {% if messges %}
+                    <h6 class="text-success"> coupon is Applied
+                        <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    </h6>
+                    {% else %}
+                    <input type="text" name="coupon_code" class="form-control border-0 p-4"  placeholder="Coupon Code" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Apply Coupon</button>
+                    </div>
+                    {% endif %}
+
+                    
+                    
+                </div>
+            </form> {% endcomment %}
+
+            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+            <div class="bg-light p-30 mb-5">
+                <div class="border-bottom pb-2 cart_data">
+                   
+                    <div class="d-flex justify-content-between mb-3  checkout_data">
+                        <h6>Subtotal &nbsp;  &#8377;</h6>
+                        <h6 ><input type="text"  class="sub_total border-0  " value="{{total}}"   style="width:6rem;" readonly></h6>
+                    </div>
+                    
+                        <div class=" mb-3  checkout_data text-success">
+                            <h6>Discount </h6>
+                            {% for i in cartdat %}
+                                {% if i.dis_amt != 0 %}
+                                
+                                    <h6><input type="text" class=" border-0 text-success w-25 " style="margin-left: 15rem;" value="-{{cart_item.dis_amt}}" style="width:6rem;" readonly></h6>
+                                 
+                                {% endif %}
+                        {% endfor %}
+                    </div>
+                   
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Delivery Charge </h6>
+                        <h6 class="tax font-weight-medium"><input type="text" class="delivery_charge border-0"  style="width:4rem;" value="{{delivery_charge}}" readonly></h6>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between total_div">
+                        <h5>Total &#8377;</h5>
+                        <h5><input type="text" class="grand_total border-0 fs-4 " value="{{grand_total}}"  style="width:8rem;" readonly></h5>
+                    </div>
+                   {% if grand_total > 0 %}
+                    <a href="{% url 'checkout' %}"><button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->
+
+
+<!-- Footer Start -->
+<!-- Footer End -->
+
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+<!-- JavaScript Libraries -->
+ {% comment %} <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'lib/easing/easing.min.js' %}"></script>
+<script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script> {% endcomment %}
+
+<!-- Contact Javascript File -->
+
+<!--    making Ajax call -->
+
+
+
+
+<!-- Template Javascript -->
+{% comment %} <script src="{% static 'js/main.js' %}"></script> {% endcomment %}
+
+<script>
+
+function getCookie(name) {
+let cookieValue = null;
+if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+        }
+    }
+}
+return cookieValue;
+}
+    $(document).ready(function(){
+
+    $('.increment-btn').click(function(e){
+    e.preventDefault();
+
+    var url  = "cart_prod_inr/"
+    var csrftoken = getCookie('csrftoken')
+    var id = $(this).data('value');
+    console.log("id"+id);
+    var inc_value = $(this).closest('.product_data').find('.qty-input').val();
+
+
+    var price = $(this).closest('.product_data').find('.product_price').val();
+
+    var delivery_charge = $('.delivery_charge').val();
+
+
+    var value = parseInt(inc_value,5);
+    value = isNaN(value) ? 0:value;
+
+     if(value < 5)
+     {
+     value++;
+
+        $(this).closest('.product_data').find('.qty-input').val(value);
+
+        var total = price*value;
+         $(this).closest('.product_data').find('.item_total').val(total);
+
+//             inserting the value to  subtotal
+             $('.sub_total').val(total);
+
+        var grand_total = parseInt(delivery_charge) + total;
+        $('.grand_total').val(grand_total);
+
+            sendData();
+            function sendData(){
+             fetch(url, {
+                            method : "POST",
+                            headers: {
+                                "Content-type": "application/json",
+                                "X-CSRFToken": csrftoken,
+                            },
+                            body: JSON.stringify({
+                                  quantity:value,
+                                  id:id,
+                                  total:total,
+
+                            },null,2),
+                        })
+                        }
+                   }
+            });
+
+
+$('.decrement-btn').click(function(e){
+    e.preventDefault();
+    var pid = $(this).data('pid');
+    var cid = $(this).data('cid')
+    var url  = "cart_prod_dec/"
+    var csrftoken = getCookie('csrftoken')
+
+    var dec_value = $(this).closest('.product_data').find('.qty-input').val();
+
+    var price = $(this).closest('.product_data').find('.product_price').val();
+
+    var total = $(this).closest('.product_data').find('.item_total').val();
+
+    var delivery_charge = $('.delivery_charge').val();
+
+
+        console.log("dec_value:",dec_value);
+    if(dec_value > 1)
+     {
+         dec_value--;
+        $(this).closest('.product_data').find('.qty-input').val(dec_value);
+
+        total =price * dec_value;
+        $(this).closest('.product_data').find('.item_total').val(total)
+
+
+        //  inserting the value to  subtotal
+        $('.sub_total').val(total);
+
+        var grand_total = parseInt(delivery_charge) + total;
+        $('.grand_total').val(grand_total);
+
+        sendData();
+            function sendData(){
+             fetch(url, {
+                            method : "POST",
+                            headers: {
+                                "Content-type": "application/json",
+                                "X-CSRFToken": csrftoken,
+                            },
+                            body: JSON.stringify({
+                                  quantity:dec_value,
+                                  product_id:pid,
+                                  cartItem_id:cid,
+                                  total:total,
+
+                            },null,2),
+                        })
+                        }
+                   }
+            });
+
+});
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% endblock %}
+</body>
+
+</html>

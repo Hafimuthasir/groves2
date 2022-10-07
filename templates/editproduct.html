@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script> 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- <form method ="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        <input type ="text" name="productname" placeholder="Product title">
+        <input type ="text" name="price" placeholder="Price">
+        <input type ="text" name="description" placeholder="Description">
+        <select name="category">
+            {% for i in datas %}
+            <option value="{{i.id}}">{{i.categoryname}}</option>
+            {% endfor %}
+        </select>
+        <input type ="text" name="carbrand" placeholder="Car brand">
+        <input type ="file" name="image" placeholder="Upload Image">
+        <input type = "submit">
+    </form> -->
+            {% block content %}
+
+            {% comment %} <br>
+            <h3 style="color:white;">Edit Product</h3>
+            <br>
+            
+            <form method ="POST" enctype="multipart/form-data" class="col-9 border border-1 rounded-2 bg-light">
+                {%csrf_token%}  
+                <div class="form-group ">
+                    <br>
+                  <label for="exampleInputEmail1">Product name</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" value="{{prod.productname}}" name="productname" aria-describedby="emailHelp">
+                  <small id="emailHelp" class="form-text text-muted">This is shown as the title</small>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Price</label>
+                  <input type="text" class="form-control" value="{{prod.price}}" id="exampleInputPassword1" name="price" >
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Description</label>
+                    <input type="text" class="form-control" value="{{prod.description}}" id="exampleInputPassword1" name="description">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1">Category</label>
+                    <select name="category" class="form-control" value="{{prod.categoryname}}" id="exampleFormControlSelect1">
+                      {% for i in cate %}
+                      <option value="{{i.id}}">{{i.categoryname}}</option>
+                      {% endfor %}
+                    </select>
+                    <br>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Car Brand</label>
+                    <input type="text" class="form-control" value="{{prod.carbrand}}"  id="exampleInputPassword1" name="carbrand">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleFormControlFile1">Change Image</label>
+                    <img src="{{prod.image.url}}" style="width:100px;heigth:100px;">
+                    <input type="file" class="form-control-file" name="image" id="exampleFormControlFile1">
+                  </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            
+
+ {% endcomment %}
+
+
+
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Update Product Details :</h4>
+                    <p class="card-description">  </p>
+                    <form method = 'POST' class="forms-sample">
+                      {%csrf_token%} 
+                      <div class="form-group row">
+                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Product Name</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" name="productname" value="{{prod.productname}}" required id="exampleInputUsername2" placeholder="Product Name">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Price</label>
+                        <div class="col-sm-9">
+                          <input type="number" class="form-control" name="price" value="{{prod.price}}" required id="exampleInputEmail2" placeholder="Price in Rupees">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                          <input type="text" class="form-control" name="description" value="{{prod.description}}" required id="exampleInputMobile" placeholder="Product Description">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Stock</label>
+                        <div class="col-sm-9">
+                          <input type="number" class="form-control" name="stock" value="{{prod.stock}}" required id="exampleInputPassword2" placeholder="Enter the stock in number">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Return Availabiliy</label>
+                        <div class="col-sm-9">
+
+                          Return Available ? : <input id="OtherCheckBox" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                          <input id="OtherTextBox" class="form-control" name="retrn_policy" type="text" placeholder="Enter the Return Period" required style="display:none" />
+                      
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Category</label>
+                        <div class="col-sm-9">
+                          
+                          
+                        <select name="category" class="form-control" value="{{prod.categoryname}}" id="exampleFormControlSelect1">
+                          {% for i in cate %}
+                          <option value="{{i.id}}">{{i.categoryname}}</option>
+                          {% endfor %}
+                        </select>
+                     
+                        
+                      </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Product Brand</label>
+                        <div class="col-sm-9">
+                          
+                            
+                          <label>Brand List :</label>
+                        <select name="productbrand" class="form-control" id="exampleFormControlSelect1 Hider1" style="display:block">
+                          {% for i in prodbrand %}
+                          <option value="{{i.id}}">{{i.productbrand}}
+                          </option>
+                          {% endfor %}
+                        </select>
+                    
+                        Other Brand : <input id="OtherCheckBox2" name="othbr" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                          <input id="OtherTextBox2" class="form-control" name="other_brand" type="text" placeholder="Enter the Brand name" required style="display:none" />
+                      
+                        </div>
+                      </div>
+                      
+
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Car Brand</label>
+                        <div class="col-sm-9">
+                        <select class="form-control form-control-lg" name="carbrand" value="{{prod.carbrand}}" id="exampleFormControlSelect1">
+                          {% for i in carbr %}
+                          <option value="{{i.id}}">{{i.carbrand}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      </div>
+                      {% comment %} <div class="form-check form-check-flat form-check-primary">
+                        <label class="form-check-label">
+                          <input type="checkbox" class="form-check-input">Product Brand</label>
+                      </div> {% endcomment %}
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 1</label>
+                        <div class="col-sm-9">
+                        <input type="file" class="form-control-file" required name="image" id="exampleFormControlFile1">
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 2</label>
+                        <div class="col-sm-9">
+                        <input type="file" class="form-control-file" name="image2" id="exampleFormControlFile1">
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 3</label>
+                        <div class="col-sm-9">
+                        <input type="file" class="form-control-file" name="image3" id="exampleFormControlFile1">
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 4</label>
+                        <div class="col-sm-9">
+                        <input type="file" class="form-control-file" name="image4" id="exampleFormControlFile1">
+                        </div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button class="btn btn-dark">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <script defer src="https://cdn.crop.guide/loader/l.js?c=NMYQYH"></script>
+              
+              <script type="text/javascript">
+
+                function toggleOtherTextboxVisible()
+                {
+                    var check = document.getElementById('OtherCheckBox');
+                    if (check.checked) {
+                        document.getElementById('OtherTextBox').style.display = 'block';
+                        
+                    }
+                    else
+                        document.getElementById('OtherTextBox').style.display = 'none';
+                        
+                        
+                    var che = document.getElementById('OtherCheckBox2');
+                    if (che.checked) {
+                        
+                        document.getElementById('OtherTextBox2').style.display = 'block';
+                        document.getElementById('Hider1').style.display = 'none';
+                    } 
+                    else
+                        
+                        document.getElementById('OtherTextBox2').style.display = 'none';
+                        document.getElementById('Hider1').style.display = 'block'; 
+                }
+            </script>
+              {% endblock %}
+</body>
+</html>

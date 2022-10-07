@@ -1,0 +1,152 @@
+{% extends 'homebase.html'  %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <br><br><br><br>
+    <div class="container-fluid">
+        <h1>Add Address</h1>
+    <br>
+    <div  class="row">
+        <div class="col-md-8 mb-4">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Biling details</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {%csrf_token%}
+                <!-- 2 column grid layout with text inputs for the first and last names -->
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label" for="form7Example1">Name</label>
+                      <input type="text" name="name" id="form7Example1" class="form-control" />
+                      
+                    </div>
+                  </div>
+                  {% comment %} <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label" for="form7Example2">Last name</label>
+                      <input type="text" id="form7Example2" class="form-control" />
+                      
+                    </div>
+                  </div> {% endcomment %}
+                </div>
+      
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example3">Phone</label>
+                  <input type="text" name="phone" id="form7Example3" class="form-control" />
+                  
+                </div>
+      
+                <!-- Text input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example7">Address</label>
+                  <textarea class="form-control" name="address" id="form7Example7" rows="4"></textarea>
+                </div>
+      
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example5">Pincode</label>
+                  <input type="number" name="pincode" id="form7Example5" class="form-control" />
+                  
+                </div>
+      
+                <!-- Number input -->
+                {% comment %} <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example6">Phone</label>
+                  <input type="number" name="phone" id="form7Example6" class="form-control" />
+                  
+                </div> {% endcomment %}
+
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example6">city</label>
+                  <input type="text" name="city" id="form7Example6" class="form-control" />
+                  
+                </div>
+
+                <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example6">State</label>
+                  <input type="text" name="state" id="form7Example6" class="form-control" />
+                  
+                </div>
+      
+                <!-- Message input -->
+                {% comment %} <div class="form-outline mb-4">
+                    <label class="form-label" for="form7Example7">Additional information</label>
+                  <textarea class="form-control" id="form7Example7" rows="4"></textarea>
+                </div> {% endcomment %}
+      
+
+
+                <!-- Checkbox -->
+                <div class="form-check justify-content-center mb-2">
+                    <button type="submit" class="btn btn-primary btn-md ">
+                        Save Address
+                      </button>
+                </div> 
+              </form>
+            </div>
+          </div>
+        </div>
+      
+         <div class="col-md-4 mb-4">
+          <div class="card mb-4">
+            <div class="card-header py-3">
+              <h5 class="mb-0">Saved Addresses</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+              {% for i in address %} 
+              
+                                 <label for="html">{{i.buyer_name}}</label>
+                                 <p for="html">{{i.buyer_phone}}
+                                    {{i.address}}<br>
+                                    {{i.pincode}}<br>
+                                 {{i.city}}<br>
+                                 {{i.state}}<br>
+                                 {{i.country}}</p>
+                                 <a href="#">Remove</a>
+                                 <hr>
+                                 {% endfor %}
+              {% comment %} 
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s
+                  &nbsp<a href="#">Remove</a> {% endcomment %}
+                  {% comment %} <a href="#">Delete</a> {% endcomment %}
+                {% comment %} </li> {% endcomment %}
+                {% comment %} <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  Shipping
+                  <span>Gratis</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                  <div>
+                    <strong>Total amount</strong>
+                    <strong>
+                      <p class="mb-0">(including VAT)</p>
+                    </strong>
+                  </div>
+                  <span><strong>$53.98</strong></span>
+                </li> {% endcomment %}
+              </ul>
+      
+              {% comment %} <button type="button" class="btn btn-primary btn-lg btn-block">
+                Make purchase
+              </button> {% endcomment %}
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

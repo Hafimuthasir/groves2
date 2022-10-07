@@ -1,0 +1,123 @@
+{% extends 'base.html'  %}
+{% block content %}
+
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Add Offers By category</h4>
+        <p class="card-description">  </p>
+        <form method = 'POST' class="forms-sample">
+          {%csrf_token%} 
+
+          <div class="form-group row">
+            <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Category</label>
+            <div class="col-sm-9">
+            <select name="category" class="form-control" id="exampleFormControlSelect1">
+              {% for i in datas %}
+              <option value="{{i.id}}">{{i.categoryname}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Add Discount By :</label>
+            <div class="col-sm-9">
+
+              {% comment %} <input id="OtherCheckBox" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" /> {% endcomment %}
+              {% comment %} Price : <input id="OtherCheckBox2" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" /> {% endcomment %}
+              Percentage : <input id="OtherTextBox" class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" />
+          
+              
+              {% comment %} <input id="OtherTextBox2" class="form-control" name="disprice" type="text" placeholder="Enter the Discount Price" style="display:none" /> {% endcomment %}
+          
+            </div>
+          </div>
+
+          {% comment %} <div class="form-group row">
+            <label for="exampleInputMobile" class="col-sm-3 col-form-label">Discount Price</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" name="description" required id="exampleInputMobile" placeholder="Product Description">
+            </div>
+          </div>
+        {% endcomment %}
+        
+          <button type="submit" class="btn btn-primary mr-2" value="cate_choice" name="cate_choice">Submit</button>
+          {% comment %} <button class="btn btn-dark">Cancel</button> {% endcomment %}
+        </form>
+      </div>
+    </div>
+  </div>
+  {% comment %} &nbsp&nbsp&nbsp&nbsp<a href="#" class="btn btn-primary">Clear all offers</a> {% endcomment %}
+  
+  <div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Offer applied Categories</h4>
+          {% comment %} <p class="card-description"> Add class <code>.table</code> {% endcomment %}
+          </p>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  {% comment %} <th >id</th> {% endcomment %}
+                  <th >Category Name</th>
+                  <th >Offer appleid</th>
+                  {% comment %} <th >Offer</th> {% endcomment %}
+                  <th >Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in produ %}
+                <tr>
+                  <td>{{i.category}}</td>
+                  {% comment %} <td>{{i.}}</td> {% endcomment %}
+              <td>
+                {% comment %} <a href="#" class="btn btn-danger" style="border-radius: 16px;">Yes</a> {% endcomment %}
+                {% if i.dis_price_type == 'percentage' %}
+                {{perc}}%
+                {% endif %}
+
+                {% if i.dis_price_type == 'flat' %}
+                Flat Rs. {{perc}}
+                {% endif %}
+              </td>
+              <td>
+                {% comment %} <form method="POST">
+                  {% csrf_token %} {% endcomment %}
+                <a href="{% url 'remove_cate_offer' i.category %}" class="btn btn-danger" style="border-radius: 16px;">Remove</a>
+                  {% comment %} <button type="submit" name="remove_bt" value="remove_bt" class="btn btn-danger">Remove</button> {% endcomment %}
+                {% comment %} </form> {% endcomment %}
+                 
+              </td>
+              
+              </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div></div></div></div>
+
+  <script type="text/javascript">
+    function toggleOtherTextboxVisible()
+    {
+        var check = document.getElementById('OtherCheckBox');
+        if (check.checked) {
+            document.getElementById('OtherTextBox').style.display = 'block';
+        }
+        else
+            document.getElementById('OtherTextBox').style.display = 'none';
+
+        var check = document.getElementById('OtherCheckBox2');
+        if (check.checked) {
+                document.getElementById('OtherTextBox2').style.display = 'block';
+        }
+        else
+                document.getElementById('OtherTextBox2').style.display = 'none';
+
+    }
+</script>
+
+{% endblock %}

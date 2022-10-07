@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+{% extends 'homebase.html'  %}
+{% load static %}
+
+{%block content%}
+<br><br><br>
+
+<br><br>
+    <!-- <section class="py-5">
+        
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{datas.image.url}}" alt="..." /></div>
+                <div class="col-md-6">
+                    <div class="small mb-1">{{datas.carbrand}}</div>
+                    <h1 class="display-5 fw-bolder">{{datas.productname}}</h1>
+                    <div class="fs-5 mb-5">
+                        <span class="text-decoration-line-through">Rs.2500</span>
+                        <span>Rs.{{datas.price}}</span>
+                    </div>
+                    <p class="lead">{{datas.description}}</p>
+                    <div class="d-flex">
+                        <form method = "POST">
+                            {%csrf_token%} 
+                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem"/>
+                        <button class="btn btn-outline-dark flex-shrink-0" value="submit" type="submit" name="cartbt">
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to cart
+                        </button>
+                        <button class="btn btn-outline-dark flex-shrink-0" value="submit" type="submit" name="wishbt">
+                            <i class="bi-cart-fill me-1"></i>
+                            Wishlist
+                        </button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section> -->
+
+    <!-- real -->
+
+
+	
+	
+
+
+
+{% comment %} its the zoom page {% endcomment %}
+
+
+
+
+
+
+    <!-- Page Content -->
+    <div class="page-heading header-text">
+        <div class="container">
+            <div class="row">
+       <div class="container">
+        <div class="row"> 
+          <div class="col-md-12">
+            <h3>
+              Product Detail
+            </h3>
+            <br>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="services">
+      <div class="container">
+
+        
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="product_detailspic_item img-zoom-container h-100" id="img-container" >
+                  <img src="{{ datas.image.url }}" alt="" class="img-fluid wc-image" id="selectImg" style="width: 400px" >
+                </div>
+              </div>
+              <div class="col-md-6">
+              </div>
+            </div>
+            <!-- <div class="img-zoom-result" id="myresult">
+              
+            </div> -->
+            <br>
+
+            {% comment %}    {% endcomment %}
+            {% if datas.image3 %}
+              <div class="col-sm-1 col-6">
+                <div>
+                  <img src="{{ datas.image2.url }}" alt="" class="img-fluid">
+                </div>
+                <br>
+              </div>
+              {% endif %}
+              {% if datas.image3 %}
+              <div class="col-sm-1 col-6">
+                <div>
+                  <img src="{{ datas.image3.url }}" alt="" class="img-fluid">
+                </div>
+                <br>
+              </div>
+              {% endif %}
+
+              {% if datas.image3 %}
+              <div class="col-sm-1 col-6">
+                <div>
+                  <img src="{{ datas.image3.url }}" alt="" class="img-fluid">
+                </div>
+                <br>
+              </div>
+            </div>
+            {% endif %}
+
+             {% if datas.image4 %}
+              <div class="col-sm-4 col-6">
+                <div>
+                  <img src="{{ datas.image4.url }}" alt="" class="img-fluid">
+                </div>
+                <br>
+              </div>
+            {% comment %} </div> {% endcomment %}
+            {% endif %} 
+          
+          {% comment %} </div> {% endcomment %}
+          
+           
+          {% comment %} <div class="row" style="margin-left:50%;">  {% endcomment %}
+          <div class="col-md-5">
+            <div class="sidebar-item recent-posts">
+              <div class="sidebar-heading">
+                <h4>{{ datas.productname }}&nbsp;&nbsp;<br>
+                    ₹{{ datas.price }}</h4><br>
+              </div>
+
+              <div class="content">
+                
+              </div>
+            </div>
+            <div class="sidebar-item recent-posts">
+              <div class="sidebar-heading">
+                <h4>Description</h4>
+              </div>
+              <div class="content">
+                <p>{{ datas.description }}</p>
+              </div>
+            </div>
+
+            <br>
+            <br>
+          
+            <br>
+
+            <form action="" method="post">
+              {% csrf_token %}
+
+               <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  
+                </div>
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <input type="submit" name="cartbt" class="btn btn-primary" value="Add to Cart">
+                    <input type="submit" name="wishlist_button" class="btn btn-danger" value="Add to wishlist">
+                    <!-- <a href="" class="filled-button" type="submit" name="cart_button" value="submit"> Add to Cart </a> -->
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <br>
+          </div>
+        </div>
+    
+        <br>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Additional Scripts -->
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="{% static 'assets/js/owl.js' %}"></script>
+    <script src="{% static 'assets/js/slick.js' %}"></script>
+    <script src="{% static 'assets/js/accordions.js' %}"></script>
+
+    <script language = "text/Javascript"> 
+      cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+      function clearField(t){                   //declaring the array outside of the
+      if(! cleared[t.id]){                      // function makes it static and global
+          cleared[t.id] = 1;  // you could use true and false, but that's more typing
+          t.value='';         // with more chance of typos
+          t.style.color='#fff';
+          }
+      }
+    </script>
+ <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+           
+    <script>
+
+var options1 = {
+    width: 400,
+    zoomWidth: 500,
+    offset: {vertical: 0, horizontal: 10}
+};
+
+// If the width and height of the image are not known or to adjust the image to the container of it
+var options2 = {
+    fillContainer: true,
+    offset: {vertical: 0, horizontal: 10}
+};
+
+new ImageZoom(document.getElementById("img-container"), options2);
+    </script>
+
+    {% endblock %}
+  </body>
+</html>

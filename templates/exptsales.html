@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+            <style>
+                ul {
+    list-style-type: none;
+}
+            </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h4 class="ml-5">Monthly Sales Report </h4>
+        <h1 class="d-flex " style="margin-left:20rem;"><strong>BEE SHOPEE</strong></h1>
+        <hr>
+        
+        <div class="col">
+            <h4>Company Name: BEESHOPEE PVT LMT</h4>
+            <h4>Company Email: beeshopee@gmail.com</h4>
+            <h5>Company Phone: +911234567890</h5>
+            <h5>Company Location: 123 stree Bangaluru, India</h5>
+
+        </div>
+        <hr>
+        </div>
+        <div class="row">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><strong>Date</strong></th>
+                        <th scope="col"><strong>products</strong></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"><strong>Quantity</strong></th>
+                        <th scope="col"><strong>Total</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in report %}
+                    <tr>
+                        <td>{{report.date}}</td>
+                        <td>{{report.product_name}}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{report.quantity}}</td>
+                       <td>{{report.amount}}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    <tr>
+                        <hr>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td>
+                          <strong>  RS. {{total_amount}}</strong>
+                        </td>
+                    </tr>
+                </tbody>
+            
+            </table>
+                  
+        </div>
+
+       
+
+    
+</div>
+</body>
+</html>

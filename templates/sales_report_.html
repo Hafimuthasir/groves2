@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}
+Sales Report
+{% endblock %}
+{% block content %}
+<div id="content" class="p-4 p-md-5 pt-5">
+  
+  <div class='row d-flex'>
+    <div class='d-flex justify-content-end'>
+
+      <a href="{% url 'export_to_pdf' %}" class='btn mb-3 me-2 btn-outline-primary'>Export to PDF</a>
+      <a href="{% url 'export_to_excel' %}" class='btn mb-3 btn-outline-success'>Export to XLS</a>
+    </div>  
+   
+   <div class='col'>
+    <h5 class="card-title">Sales of Day</h5>
+    <form name='myForm' method='post'>
+      {% csrf_token %}
+      <div class='d-flex'>
+        <input  class="form-control" type='date' name='date' required>
+        <input type='submit' class='btn-primary ms-2' value='submit' onclick="">
+      </div>
+    </form>
+  </div>
+  <div class='col'>
+    <h5 class="card-title">Monthly Sales</h5>
+    <form name='myForm1' method='post'>
+      {% csrf_token %}
+      <div class='d-flex'>
+        <input  class="form-control" type='month' name='month' required>
+        <input type='submit' class='btn-primary ms-2' value='submit' onclick="">
+      </div>
+    
+    </form>
+  </div> 
+  
+  <br><div class='col'>
+    <br>
+    <h5 class="card-title mt-2">Sales On Selected Days</h5> 
+    <form name='myForm2' method='post'>
+      {% csrf_token %}
+      <div class='d-flex'>
+        <input  class="form-control me-2" type='date' name='date1' required>
+        <input  class="form-control" type='date' name='date2' required>
+        <input type='submit' class='btn-primary ms-2' value='submit' onclick="">
+      </div>
+    
+    </form>
+  </div>  
+</div>
+<br><br>
+
+<table class="table mt-2">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Date</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Product Price</th>
+    </tr>
+  </thead>
+  <tbody>{% with var=1 %}
+    {% endwith %}
+      {% for i in sales %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{i.productName}} {{i.categoryName}}</td>
+      <td>{{i.date}}</td>
+      <td>{{i.quantity}}</td>
+      <td>₹ {{i.productPrice}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan='4'>Total Amount</td>
+      <td>₹ {{total}}</td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  {% for i in messages %}
+  swal('Perfect',"{{i}}","warning");
+{% endfor %}
+</script>
+
+{% endblock %}

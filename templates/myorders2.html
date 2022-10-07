@@ -1,0 +1,439 @@
+{% extends 'homebase.html'  %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body >
+    {% block content %}
+    <div style="background-color:#e3e4e4"><br><br><br>
+        
+        <div class="container-fluid ">
+          <p class="mb-1 h4 shadow p-3 mb-5 bg-white rounded" style="padding-left:45%;margin-top:2%; color:#6c7ae0; text-align:center;">My Orders</p>
+          {% comment %} <p class="mb-0">You have 4 items in your cart</p> {% endcomment %}
+        </div>
+
+    
+    {% comment %} <section class="h-100 h-custom" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+              <div class="card">
+                <div class="card-body p-4">
+      
+                  <div class="row">
+      
+                    <div class="col-lg-8">
+                      <h1>&nbsp&nbspMy Orders</h1>
+                      <hr>
+      
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        {% comment %} <div>
+                          <p class="mb-1">Shopping cart</p>
+                          <p class="mb-0">You have 4 items in your cart</p>
+                        </div> {% endcomment %}
+                        {% comment %} <div>
+                          <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
+                              class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
+                        </div> {% endcomment %}
+                      {% comment %} </div>
+                      {% for i in orders %}
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="{{i.product.image.url}}"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>{{i.product.productname}}</h5>
+                                <!-- <p class="small mb-0">256GB, Navy Blue</p> -->
+                              </div>
+                              <div class="ms-3">
+                                <h5>{{i.product.productname}}</h5>
+                                <!-- <p class="small mb-0">256GB, Navy Blue</p> -->
+                              </div>
+                              
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 70px;">
+                                <h5 class="fw-normal mb-0"><a href="#"></a>&nbspQty.{{i.quantity}}&nbsp<a href="#"></a></h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">&nbsp&nbspRs.{{i.product.price}}</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                              <div style="width: 80px;">
+                                <a href="#">Cancel</a>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    
+                      {% endfor %} {% endcomment %}
+                      <!-- <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img2.webp"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>Samsung galaxy Note 10 </h5>
+                                <p class="small mb-0">256GB, Navy Blue</p>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 50px;">
+                                <h5 class="fw-normal mb-0">2</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">$900</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img3.webp"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>Canon EOS M50</h5>
+                                <p class="small mb-0">Onyx Black</p>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 50px;">
+                                <h5 class="fw-normal mb-0">1</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">$1199</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="card mb-3 mb-lg-0">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img4.webp"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>MacBook Pro</h5>
+                                <p class="small mb-0">1TB, Graphite</p>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 50px;">
+                                <h5 class="fw-normal mb-0">1</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">$1799</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+      
+                    {% comment %} </div> {% endcomment %}
+                    
+                    {% comment %} <div class="col-lg-5"> {% endcomment %}
+                        
+                      {% comment %} <div class="card bg-primary text-white rounded-3">
+                        <div class="card-body"> {% endcomment %}
+                          <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Card details</h5>
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
+                              class="img-fluid rounded-3" style="width: 45px;" alt="Avatar">
+                          </div>
+                -->
+                          <!-- <p class="small mb-2">Card type</p>
+                          <a href="#!" type="submit" class="text-white"><i
+                              class="fab fa-cc-mastercard fa-2x me-2"></i></a>
+                          <a href="#!" type="submit" class="text-white"><i
+                              class="fab fa-cc-visa fa-2x me-2"></i></a>
+                          <a href="#!" type="submit" class="text-white"><i
+                              class="fab fa-cc-amex fa-2x me-2"></i></a>
+                          <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
+      
+                          <form class="mt-4">
+                            <div class="form-outline form-white mb-4">
+                              <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
+                                placeholder="Cardholder's Name" />
+                              <label class="form-label" for="typeName">Cardholder's Name</label>
+                            </div>
+      
+                            <div class="form-outline form-white mb-4">
+                              <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
+                                placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" />
+                              <label class="form-label" for="typeText">Card Number</label>
+                            </div>-->
+      
+                            {% comment %} <div class="row mb-4">
+                              <div class="col-md-6"> {% endcomment %}
+                                {% comment %} <div class="form-outline form-white">
+                                  <input type="text" id="typeExp" class="form-control form-control-lg"
+                                    placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" />
+                                  <label class="form-label" for="typeExp">Expiration</label>
+                                </div> {% endcomment %}
+                              {% comment %} </div>
+                              <div class="col-md-6">
+                                {% comment %} <div class="form-outline form-white">
+                                  <input type="password" id="typeText" class="form-control form-control-lg"
+                                    placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
+                                  <label class="form-label" for="typeText">Cvv</label>
+                                </div>  {% endcomment %}
+                              {% comment %} </div>
+                            </div> {% endcomment %}
+      
+                          {% comment %} </form>
+      
+                          <hr class="my-4">
+      
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Subtotal</p>
+                            
+                            <p class="mb-2">{{price}}</p>
+                         
+                        </div>
+      
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Shipping</p>
+                            <p class="mb-2">₹80.00</p>
+                          </div>
+      
+                          <div class="d-flex justify-content-between mb-4">
+                            <p class="mb-2">Total(Incl. taxes)</p>
+                            <p class="mb-2">₹4818.00</p>
+                          </div>
+      
+                          <button type="button" class="btn btn-info btn-block btn-lg">
+                            <a href="{% url 'checkout' %}" style="color:white;">
+                            <div class="d-flex justify-content-between">
+                              <span>$4818.00</span>
+                              <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                            </div>
+                            </a>
+                          </button>
+      
+                        </div>
+                      </div>
+      
+                    </div> {% endcomment %}
+      
+                  {% comment %} </div> {% endcomment %}
+      
+                {% comment %} </div> {% endcomment %}
+              {% comment %} </div> {% endcomment %}
+            {% comment %} </div>
+          </div> {% endcomment %}
+        {% comment %} </div>
+      </section> {% endcomment %}
+    <!-- <h1>Your Cart..,</h1>
+    <br>
+    <table style="width:70%" class="table table-light table-hover">
+        <thead class="thead-dark">
+          <tr style="width:10%;">
+            <th scope="col">Product image</th>
+            <th scope="col">Product name</th>
+            <th scope="col">price</th>
+            <th scope="col">quantity</th>
+            <th scope="col">delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in cartdat %}
+          <tr>
+            <td><img src="{{i.productid.image.url}}"></td>
+            <td scope="row">{{i.productid.productname}}</td>
+            <td scope="row">{{i.productid.price}}</td>
+            <td scope="row">{{i.quantity}}</td>
+            <td><a href="#">delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table> --> 
+      {% comment %}
+      
+      <h1>&nbsp&nbspMy Orders</h1>
+      <div class="container-fluid" style="justify-content:center;">
+      <table class="table table-hover"style="width:80%; margin-left: auto;
+      margin-right: auto;">
+         <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Order Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="height:100px;">
+            {% for i in orders %}
+            
+            <td><img
+                src="{{i.product.image.url}}"
+                class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">{{i.product.productname}}</td>
+            <td>{{i.product.productname}}</td>
+            <td>{{i.product.price}}</td>
+            <td>{{i.quantity}}</td>
+            <td>{{i.status}}</td>
+            
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>{% endcomment % }
+       
+
+      {% for i in orders %} 
+      <div class="container-fluid">
+      <div class="card shadow p-3 mb-5 bg-white rounded">
+        {% comment %} <div class="card-header">
+          Featured
+        </div> {% endcomment %}
+       <div class="row">
+        <div class="col-lg-6" style="padding-left:5%"><br>
+        <img
+                src="{{i.product.image.url}}"
+                class="img-fluid rounded-3" alt="Shopping item" style="width: 20%;">
+        <div class="card-body">
+          <h5 class="card-title"style="font-weight:bold">{{i.product.productname}}</h5> 
+          {% comment %} <p class="card-text"style="font-weight:bold">With supporting text below as a natural lead-in to additional content.</p> {% endcomment %}
+          <p class="card-text"style="font-weight:bold">Quantity:{{i.quantity}}</p>
+          <p class="card-text"style="font-weight:bold">Rs.{{i.product.total_disprice}}/-</p>
+          
+          {% if i.status != 'Cancelled' %}
+          <div class="progress" style="height:5px;">
+            
+                        {% if i.status == 'Confirmed'%}
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 20%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        
+
+                        {% elif i.status == 'Shipped'%}
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 40%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        
+
+                        {% elif i.status == 'OutForDelivery'%}
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        
+
+                        {% elif i.status == 'Delivered'%}
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        {% else %}
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        {% endif  %}
+                      
+                      </div>
+{% endif %}
+
+          {% if i.status == "Cancelled" %}         
+          <p class="card-text"style="font-weight:bold;">Order Status :<text style="color:red">{{i.status}}</text></p>
+         {% else %}
+         <p class="card-text"style="font-weight:bold;">Order Status : {{i.status}}</p>
+          {% endif %}
+         
+        </div>
+      </div>
+      <div class="col-lg-6" style="padding-top:10%;padding-left:10%;">
+        {% if  i.status == "Delivered" %}
+        {% if i.product.retrn_policy != "0" %}
+        <a href="{% url 'returnord' i.id %}" class="btn btn-danger" onClick="return confirm('are u sure ? ')" style="margin-top:7%;" >Return</a> 
+        {% else %}
+        <p>Item Delivered On : 09-17-2022 </p>
+        <p>No Return Policy Left on this Product</p>
+        {% endif %}
+        <a href="{% url 'order_detail_user' i.id %}" class="btn btn-success" onClick="return confirm('are u sure ? ')"style="margin-top:7%;" >View Order Details</a>
+        {% elif i.status != "Cancelled" %}
+        <p>Delivery Date : 09-17-2022 </p>
+        <p></p>
+        <a href="{% url 'order_detail_user' i.id %}" class="btn btn-success" style="margin-top:7%;" >View Order Details</a>
+        <a href="{% url 'cancelord' i.id %}" class="btn btn-danger" onClick="return confirm('are u sure want to cancel ? ')"style="margin-top:7%;" >Cancel Order</a>
+        
+        {% endif %}
+        {% comment %} <h1>Hai Hello</h1> {% endcomment %}
+      
+      </div>
+    </div>
+    <br>
+    
+  </div>
+</div>
+<br>  
+
+    {% comment %} {% endfor %} {% endcomment %}
+</div>
+</div>
+
+
+<nav aria-label="Page navigation example" >
+  <ul class="pagination pagination-sm justify-content-center" style="height:20px;">
+    
+ 
+
+{% if datas.has_previous %}
+  <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+
+  <li class="page-item"><a class="page-link" href="?page={{ datas.previous_page_number }}">Previous</a></li>
+  
+{% endif %}
+
+
+{% comment %} <li class="page-item disabled"><a href="#" class="page-link">Page {{ datas.number }} of {{ datas.paginator.num_pages }}</a></li> {% endcomment %}
+
+
+{% for i in nums %}
+  <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+
+{% endfor %}
+
+
+{% if datas.has_next %}
+  <li class="page-item"><a class="page-link" href="?page={{ datas.next_page_number }}">Next</a></li>
+
+  <li class="page-item"><a class="page-link" href="?page={{ datas.paginator.num_pages }}">Last &raquo</a></li>
+
+{% endif %}
+
+ </ul>
+</nav>
+      {% endblock %}
+</body>
+</html>
+</body>
+</html>

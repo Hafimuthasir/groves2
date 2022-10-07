@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        
+        <h4 class="card-title">All Products</h4>
+        <form method="POST">
+          {%csrf_token%}
+        <input type="text" class="form-control" style="width:40%;" name="search" id="exampleInputUsername2" placeholder="Search"><button class="btn btn-primary" name="search-product" type="submit">Search</button>
+         
+      </form>
+        {% comment %} <p class="card-description"> Add class <code>.table</code> {% endcomment %}
+        {% comment %} </p> {% endcomment %}
+        
+        <div class="table-responsive">
+          
+          <table class="table table-striped">
+            <thead>
+              <tr>
+        <th >id</th>
+        <th >created_at</th>
+        <th >product name</th>
+        <th >price</th>
+        <th >car brand</th>
+        <th >image</th>
+        <th >category</th>
+        <th >Add Offer</th>
+        {% comment %} <th >Offer Details</th> {% endcomment %}
+        {% comment %} <th >Delete</th> {% endcomment %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in datas %}
+      <tr>
+        <td>{{i.id}}</td>
+        <td>{{i.created_at}}</td>
+        <td>{{i.productname}}</td>
+        <td>{{i.price}}</td>
+        <!-- <td class="col-md-1" style="width:10px;">{{i.description}}</td> -->
+        <td>{{i.carbrand}}</td>
+        <td><img src="{{i.image.url}}"></td>
+        <td>{{i.category}}</td>
+        
+        <td><a href="{% url 'addoffer' i.id %}" class="btn btn-success">Offer Details</a></td> 
+      </tr>
+      {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav aria-label="Page navigation example" >
+    <ul class="pagination pagination-sm justify-content-center" style="height:20px;">
+      
+   
+  
+  {% if datas.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+  
+    <li class="page-item"><a class="page-link" href="?page={{ datas.previous_page_number }}">Previous</a></li>
+    
+  {% endif %}
+  
+  
+  {% comment %} <li class="page-item disabled"><a href="#" class="page-link">Page {{ datas.number }} of {{ datas.paginator.num_pages }}</a></li> {% endcomment %}
+  
+  
+  {% for i in nums %}
+    <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+  
+  {% endfor %}
+  
+  
+  {% if datas.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ datas.next_page_number }}">Next</a></li>
+  
+    <li class="page-item"><a class="page-link" href="?page={{ datas.paginator.num_pages }}">Last &raquo</a></li>
+  
+  {% endif %}
+  
+   </ul>
+  </nav>
+  {% endblock %}

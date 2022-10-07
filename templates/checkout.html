@@ -1,0 +1,495 @@
+{% extends 'homebase.html'  %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body  style="background-color: #eee;">
+    {% block content %}
+    <br><br><br>
+    <div class="container-fluid ">
+      <p class="mb-1 h4 text-success shadow p-3 mb-5 bg-white rounded" style="padding-left:45%;margin-top:2%;color:blue; text-align:center;">Checkout</p>
+      {% comment %} <p class="mb-0">You have 4 items in your cart</p> {% endcomment %}
+    </div>
+    <section class="h-100 h-custom" >
+        <div class="container py-5 h-100" >
+          <div class="row d-flex justify-content-center align-items-center h-100" >
+            {% comment %} <div class="col"> {% endcomment %}
+              <div class="card shadow p-3 mb-5 bg-white rounded" >
+                <div class="card-body p-4">
+      
+                  <div class="row">
+
+                    <div class="col">
+                      {% comment %} <h5 class="mb-3"><a href="#!" class="text-body"><i
+                            class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
+                      <hr> {% endcomment %}
+      
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                          <form method = "POST" class="mt-4">
+                            {%csrf_token%}
+                            
+                          <h4>Saved Addresses</h4><br>
+                              {% for i in address %}  
+                              <input type="radio" id="html" name="address" checked value="{{i.id}}">
+                                 <label for="html">{{i.buyer_name}}</label><br>
+                                 <label for="html">{{i.buyer_phone}}</label><br>
+                                 <label for="html">{{i.address}}</label><br>
+                                 <label for="html">{{i.pincode}}</label><br>
+                                 <label for="html">{{i.city}}</label><br>
+                                 <label for="html">{{i.state}}</label><br>
+                                 <label for="html">{{i.country}}</label><br><hr>  
+                                 {% endfor %}
+                                 <a href="{% url 'addaddress' %}">Change Address</a>
+                                </div>
+                             
+                                
+                          {% comment %} <p class="mb-0">You have 4 items in your cart</p> {% endcomment %}
+                        </div>
+                        {% comment %} <div>
+                          <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
+                              class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
+                        </div> {% endcomment %}
+                      </div>
+      
+                    <div class="col-lg-7">
+                      {% comment %} <h5 class="mb-3"><a href="#!" class="text-body"><i
+                            class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
+                      <hr> {% endcomment %}
+      
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        
+                        {% comment %} <div>
+                          <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
+                              class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
+                        </div> {% endcomment %}
+                      </div>
+                      {% for i in cart %}
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="{{i.productid.image.url}}"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>{{i.productid.productname}}</h5>
+                                <!-- <p class="small mb-0">256GB, Navy Blue</p> -->
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 70px;">
+                                <h5 class="fw-normal mb-0"></a>&nbspQty.{{i.quantity}}&nbsp</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">&nbsp&nbspRs.{{i.productid.dis_price}}</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    
+                      {% endfor %}
+                      <!-- <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img2.webp"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>Samsung galaxy Note 10 </h5>
+                                <p class="small mb-0">256GB, Navy Blue</p>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 50px;">
+                                <h5 class="fw-normal mb-0">2</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">$900</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img3.webp"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>Canon EOS M50</h5>
+                                <p class="small mb-0">Onyx Black</p>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 50px;">
+                                <h5 class="fw-normal mb-0">1</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">$1199</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="card mb-3 mb-lg-0">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                              <div>
+                                <img
+                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img4.webp"
+                                  class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                              </div>
+                              <div class="ms-3">
+                                <h5>MacBook Pro</h5>
+                                <p class="small mb-0">1TB, Graphite</p>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                              <div style="width: 50px;">
+                                <h5 class="fw-normal mb-0">1</h5>
+                              </div>
+                              <div style="width: 80px;">
+                                <h5 class="mb-0">$1799</h5>
+                              </div>
+                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+      
+                    
+                    <div class="col">
+      
+                      <div class="card text-white rounded-3" style="background-color:#38393e;">
+                        <div class="card-body">
+                          <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Card details</h5>
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
+                              class="img-fluid rounded-3" style="width: 45px;" alt="Avatar">
+                          </div>
+                -->
+                           {% comment %} <p class="small mb-2">Card type</p>
+                          <a href="#!" type="submit" class="text-white"><i
+                              class="fab fa-cc-mastercard fa-2x me-2">dsd</i></a>
+                          <a href="#!" type="submit" class="text-white"><i
+                              class="fab fa-cc-visa fa-2x me-2"></i>das</a>
+                          <a href="#!" type="submit" class="text-white"><i
+                              class="fab fa-cc-amex fa-2x me-2"></i>asd</a>
+                          <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a> {% endcomment %}
+      
+                          
+                            
+                            {% comment %} <div class="row mb-4">
+                              <div class="col-md-6">
+                                <div class="form-outline form-white">
+                                  <input type="text" id="typeExp" class="form-control form-control-lg"
+                                    placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" />
+                                  <label class="form-label" for="typeExp">Expiration</label>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-outline form-white">
+                                  <input type="password" id="typeText" class="form-control form-control-lg"
+                                    placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
+                                  <label class="form-label" for="typeText">Cvv</label>
+                                </div> -->
+                              </div>
+                            </div> {% endcomment %}
+      
+                          
+      
+                          <hr class="my-4">
+                          
+                          <div class="flex-w flex-sb-m  ">
+                           
+                          
+
+
+                            
+                              
+              
+                            {% comment %} <div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                              Update Cart
+                            </div> {% endcomment %}
+                          </div>
+                          <br>
+
+
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Subtotal</p>
+                            
+                            <p class="mb-2">₹{{subtotal}}.00</p>
+                         
+                        </div>
+      
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Shipping</p>
+                            <p class="mb-2">Free</p>
+                          </div>
+
+                          {% if coupstat == True %}
+                          {% if disprice%}
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Coupon Discount</p>
+                            <p class="mb-2">- ₹{{disprice}}</p>
+                          </div>
+                          {% endif %}
+                          
+                          {% endif %}
+      
+                          <div class="d-flex justify-content-between mb-4">
+                            <p class="mb-2">Total(Incl. taxes)</p>
+                            <p class="mb-2">₹{{total}}.00</p>
+                          </div>
+                          
+                          <div class="form-outline form-white mb-4">
+                            <label class="form-label" for="typeText">Payment Method</label>
+                            <select class="form-select" name="payment_method"style="color:black;">
+                            <option value ="COD">Cash On Delivery</option>
+                            <option value ="paypal">Paypal</option>
+                            <option value ="razorpay">Razorpay</option>
+                            </select>
+                          </div>
+
+                           <button type="submit" value="checkbt" name="checkbt" class="btn btn-info btn-block btn-lg">
+                            <div class="d-flex justify-content-between">
+                              <span>₹{{total}}.00</span>
+                              <span>Place Order <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                            </div>
+                          </button> 
+
+                        </form>
+
+
+                        
+                          {% comment %} <div id="smart-button-container">
+                            <div style="text-align: center;">
+                              <div id="paypal-button-container"></div>
+                            </div>
+                          </div>
+                        <script src="https://www.paypal.com/sdk/js?client-id=AUFTwaj5ErSgfvSlen2k4rsWmo9fB_6mact4qmSuuD3z5Q_1sSDtDIYbyWd0JD8RUQhgKSB9PU1UVCii&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
+                        <script>
+                          var amt = '{{order.order_total}}'
+                          var url = '{% url 'payment_confirm' order.payment_id %}'
+                           var id = '{{order.payment}}'
+                           var redirect_url = "{% url 'payment_complete' %}"
+                          function getCookie(name) {
+                              let cookieValue = null;
+                          
+                              if (document.cookie && document.cookie !== '') {
+                                  const cookies = document.cookie.split(';');
+                                  for (let i = 0; i < cookies.length; i++) {
+                                      const cookie = cookies[i].trim();
+                          
+                                      // Does this cookie string begin with the name we want?
+                                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          
+                                          break;
+                                      }
+                                  }
+                              }
+                          
+                              return cookieValue;
+                          }
+                          var csrftoken = getCookie('csrftoken');
+                          paypal.Buttons({
+                            // Sets up the transaction when a payment button is clicked
+                            createOrder: (data, actions) => {
+                              return actions.order.create({
+                                purchase_units: [{
+                                  amount: {
+                                    value: amt, // Can also reference a variable or function
+                                  }
+                                }]
+                              });
+                            },
+                            // Finalize the transaction after payer approval
+                            onApprove: (data, actions) => {
+                              return actions.order.capture().then(function(orderData) {
+                                // Successful capture! For dev/demo purposes:
+                                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                                const transaction = orderData.purchase_units[0].payments.captures[0];
+                                sendData()
+                                function sendData(){
+                                  fetch(url,
+                                  {
+                                      method: 'POST',
+                                      headers: {
+                                          'Content-type': 'application/json',
+                                          'X-CSRFToken': csrftoken,
+                                      },
+                                      body: JSON.stringify({
+                                          orderId: id,
+                                          transId: orderData.id,
+                                          status:orderData.status, 
+                                      }),
+                                  })
+                                  .then(response => response.json())
+                                  .then(data => {
+                                      console.log('success',data);
+                                      console.log('completed'); 
+                                      window.location.href = redirect_url + '?transactionId='+data.transId;
+                                  });
+                                }
+                                // When ready to go live, remove the alert and show a success message within this page. For example:
+                                // const element = document.getElementById('paypal-button-container');
+                                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                                // Or go to another URL:  actions.redirect('thank_you.html');
+                              });
+                            }
+                          }).render('#paypal-button-container');
+                        </script>
+                        </form>
+                        </div> {% endcomment %}
+                      </div>
+      
+                    </div>
+      
+                  </div>
+      
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-w flex-m m-r-20 m-tb-5 shadow p-3 mb-5 bg-white rounded"style="background-color:grey;">
+              <form method = "POST">
+                {%csrf_token%}
+                <div class="container" >
+                  <div class="row" >
+                    
+                    {% if coupstat == False %}
+                     <div class="col">
+                
+              <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
+                    </div>
+                    <div class="col">
+              <div class="flex-c-m stext-101 cl2 size-118 bor13 bg8 bor hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+                <button type="submit" value="submit" name="coupon_bt">Apply coupon</button>
+              </form>
+              </div></div>
+            </div> 
+            {% endif %}
+            {% if coupstat == True %}
+            <div class="col">
+            <p style="color:green;">You have already applied a coupon</p>
+            </div><div class="col">
+            <a href="#" class="btn btn-primary">Clear Coupon</a>
+            </div>
+          </div>
+            {% endif %}
+        </div><br>
+            <div class="col">
+              {% comment %} <a href="#" class="btn">Redeem Balance from Wallet</a> {% endcomment %}
+              <div class="form-group row" >
+                <div class="col-sm-9" >
+                  <div class="form-check" style="margin-left:15%;">
+                    <input id="OtherCheckBox" class="form-check-input" style="margin-left" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                    <label class="form-check-label" for="OtherCheckBox">
+                      Redeem from Wallet
+                    </label>
+                  </div>
+                  {% comment %} <label for="OtherCheckBox">Redeem from Wallet</label>
+                  <input id="OtherCheckBox" style="margin-left" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" /></p> {% endcomment %}
+                  
+                  <div id="OtherTextBox" style="display:none">
+                    <p>Available Balance : Rs.{{wallet.balance}} </p>
+                    <label>Enter the amount:</label>
+                    <form method="POST">
+                      {%csrf_token%}
+                  <input class="form-control" name="inputwall" type="text" placeholder="Enter the amount you want to redeem" required /><br>
+                <button type="submit" class="btn btn-primary" value="submit" name="redeem_bt">Redeem</button>    
+                </form>
+                </div>
+                </div>
+              </div>
+            
+              
+
+            </div>
+
+              
+
+
+
+          </div>
+            </form>
+            </div>
+
+          </div>
+          
+        </div>
+        
+      </section>
+    <!-- <h1>Your Cart..,</h1>
+    <br>
+    <table style="width:70%" class="table table-light table-hover">
+        <thead class="thead-dark">
+          <tr style="width:10%;">
+            <th scope="col">Product image</th>
+            <th scope="col">Product name</th>
+            <th scope="col">price</th>
+            <th scope="col">quantity</th>
+            <th scope="col">delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in cartdat %}
+          <tr>
+            <td><img src="{{i.productid.image.url}}"></td>
+            <td scope="row">{{i.productid.productname}}</td>
+            <td scope="row">{{i.productid.price}}</td>
+            <td scope="row">{{i.quantity}}</td>
+            <td><a href="#">delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table> -->
+      {% comment %} <br><br><br><br><br><br><br><br> {% endcomment %}
+
+
+      <script type="text/javascript">
+        function toggleOtherTextboxVisible()
+        {
+            var check = document.getElementById('OtherCheckBox');
+            if (check.checked) {
+                document.getElementById('OtherTextBox').style.display = 'block';
+            }
+            else
+                document.getElementById('OtherTextBox').style.display = 'none';                
+        }
+    </script>
+      {% endblock %}
+</body>
+</html>

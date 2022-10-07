@@ -1,0 +1,190 @@
+{% extends 'base.html'%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <h1>Sales Report</h1>
+    <div class="card mt-4">
+        <h5 class="card-header"><a href="{% url 'sales' %}" class="btn btn-primary">Filter Sales</a></h5>
+        <div class="container card-header">
+            
+            <div class="row ">
+            <form action="" method="GET">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    Sales Per Day
+                    <div class="col">
+                            <input type="date" name= "date" class="form-control date" id="date" max="2022-09-28">
+                    </div>
+                   
+                        <div class="col">
+                            <div class="input-group-append">
+                                <button class="btn btn-info ms-5" type="submit">View</button>
+                                <button class="btn btn-primary btn-sm" type="button"><a href="{% url 'export_to_excel' %}" class="text-white " style="text-decoration: none;">Export to
+                                        Excel</a></button>
+                                <button class="btn btn-primary btn-sm" type="button"><a href="{% url 'export_to_pdf' %}" class="text-white" style="text-decoration: none;">Export to
+                                        PDF</a></button>
+                            </div>
+                        </div>
+                    
+                </div>
+            </form>
+            </div>
+
+            <div class="row ">
+                <form action="{% url 'monthly_sales' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        Monthly Sales
+                        <div class="col">
+                            <input type="month" name="month_date" class="form-control month_date" id="month_date" max="">
+                        </div>
+    
+                        <div class="col">
+                            <div class="input-group-append">
+                                <button class="btn btn-info ms-5" type="submit">View</button>
+                                <button class="btn btn-primary btn-sm" type="button"><a href="{% url 'export_to_excel1' %}"
+                                        class="text-white " style="text-decoration: none;">Export to
+                                        Excel</a></button>
+                                <button class="btn btn-primary btn-sm" type="button"><a href="{% url 'export_to_pdf1' %}"
+                                        class="text-white" style="text-decoration: none;">Export to
+                                        PDF</a></button>
+                            </div>
+                        </div>
+    
+                    </div>
+                </form>
+            </div>
+    
+    
+               
+            </div>
+        
+        <div class="card-body">
+            <table class="table table-borderless ms-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if products %}
+                    {% for product in products %}
+                    <tr>
+                        <td>{{product.created_at}}</td>
+                        <td>{{product.product.productname}}</td>
+                        <td>{{product.quantity}}</td>
+                        <td>{{product.order.order_total}}</td>
+                    </tr>    
+                {% endfor %}
+                {% endif %}
+                
+                {% if month_products %}
+                {% for month_product in month_products %}
+                    <tr>
+                        
+                        <td>{{month_product.created_at}}</td>
+                        <td>{{month_product.product.productname}}</td>
+                        <td>{{month_product.quantity}}</td>
+                        <td>{{month_product.order.order_total}}</td>
+                    </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+            
+        </div>
+        <div class="card-footer text-muted">
+            Total:
+        </div>
+    </div>
+
+    <!-- monthly sales report -->
+    {% comment %} <div class="card mt-4">
+        <h5 class="card-header">Monthly Sales Report    </h5>
+        <div class="container card-header">
+            <div class="row ">
+                <form action="{% url 'monthly_sales' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <div class="col">
+                            <input type="month" name="month_date" class="form-control month_date" id="month_date" max="">
+                        </div>
+    
+                        <div class="col">
+                            <div class="input-group-append">
+                                <button class="btn btn-info ms-5" type="submit">View</button>
+                                <button class="btn btn-primary btn-sm" type="button"><a href="{% url 'export_to_excel1' %}"
+                                        class="text-white " style="text-decoration: none;">Export to
+                                        Excel</a></button>
+                                <button class="btn btn-primary btn-sm" type="button"><a href="{% url 'export_to_pdf1' %}"
+                                        class="text-white" style="text-decoration: none;">Export to
+                                        PDF</a></button>
+                            </div>
+                        </div>
+    
+                    </div>
+                </form>
+            </div>
+    
+    
+        </div>
+    
+        <div class="card-body">
+            <table class="table table-borderless ms-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody> {% endcomment %}
+                {% comment %} {% for month_product in month_products %}
+                    <tr>
+                        
+                        <td>{{month_product.created_at}}</td>
+                        <td>{{month_product.product.productName}}</td>
+                        <td>{{month_product.quantity}}</td>
+                        <td>{{month_product.order.order_total}}</td>
+                    </tr>
+                {% endfor %} {% endcomment %}
+            {% comment %} </tbody>
+        </table>
+
+    </div>
+</div> {% endcomment %}
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+    crossorigin="anonymous"></script>
+<script>
+$(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+        var maxMonth = year + '-' + month;
+        $('#date').attr('max', maxDate);
+        $('#month_date').attr('max', maxMonth);
+    });
+</script>
+{% endblock %}
+</body>
+</html>
