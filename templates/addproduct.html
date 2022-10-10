@@ -35,7 +35,7 @@
                   <div class="card-body">
                     <h4 class="card-title">Add Product :</h4>
                     <p class="card-description">  </p>
-                    <form method = 'POST' class="forms-sample">
+                    <form method = 'POST' class="forms-sample" enctype="multipart/form-data">
                       {%csrf_token%} 
                       <div class="form-group row">
                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Product Name</label>
@@ -88,7 +88,7 @@
                         <div class="col-sm-9">
                         <select name="productbrand" class="form-control" id="exampleFormControlSelect1">
                           {% for i in brand %}
-                          <option value="{{i.id}}">{{i.productbrand}}
+                          <option value="{{i.productbrand}}">{{i.productbrand}}
                           </option>
                           {% endfor %}
                         </select>

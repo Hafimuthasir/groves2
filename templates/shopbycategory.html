@@ -1,0 +1,41 @@
+{% extends 'homebase.html'  %}
+{% load static %}
+
+    {% block content %}
+    {% comment %} <br><br><br><br>
+    <div class="container-fluid">
+        <div class="row">
+            {% for i in cate %}
+            <div class="col-lg-3" style="margin-bottom:2%;">
+            <a href="{% url 'filter' i.id %}">
+    <div class="card" style="width: 17rem;">
+        {%if  i.image %}
+        <img class="rounded" style="width:100px;height:100px;" src="{{i.image.url}}" alt="Card image cap">
+        {% endif %}
+        <div class="card-body">
+          <p class="card-text">{{i.categoryname}}</p>
+        </div>
+      </div>
+    </a></div>
+        {% endfor %}
+    <br> {% endcomment %}
+    <br><br><br><br>
+    <div class="container-fluid">
+        <div class="row" style="padding-left:11%;">
+    {% for i in cate %}
+    {% comment %} <div class="col-lg-3" style="width:20rem;pading-left:10px;"> {% endcomment %}
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width:16rem;margin-bottom:5%;margin:2%;">
+        <a href="{% url 'filter' i.id %}">
+            {% if i.image %}
+        <img class="card-img-top" style="width:150px;height:150px;margin-left:12%;"src="{{i.image.url}}" alt="Card image cap">
+        {% endif %}
+        <div class="card-body" style="text-align:center;">
+          <h5 class="card-title text-dark">{{i.categoryname}}</h5>
+        </a>
+        </div>
+      </div>
+    {% comment %} </div> {% endcomment %}
+    
+       {% endfor %}
+    </div></div>
+    {% endblock %}

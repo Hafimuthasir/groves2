@@ -18,10 +18,11 @@ urlpatterns = [
     # path('clearofr', views.clearofr,name='clearofr'),
     path('exportsalestopdf', views.export_sales_to_pdf,name='exportsalestopdf'),
     path('payment_methods_razorpay/<int:id>', views.payment_methods_razorpay, name='payment_methods_razorpay'),
-     path('razor_pay/<int:id>', views.razor_pay, name='razor_pay'),
+    path('razor_pay/<int:id>', views.razor_pay, name='razor_pay'),
     path('updatetproduct/<int:id>', views.updateproduct,name='updateproduct'),
     path('download/<int:id>', views.download,name='download'),
     path('cancelord/<int:id>', views.cancelord,name='cancelord'),
     path('order_detail_user/<int:id>', views.order_detail_user,name='order_detail_user'),
     path('returnord/<int:id>', views.returnord,name='returnord')
+
 ]

@@ -58,8 +58,8 @@ def checkout(request):
         if cartitems:
             for i in cartitems:
                 if i.productid.dis_price :
-                    a = a+int(i.productid.dis_price)*int(i.quantity)
-                    subtotal = subtotal+ int(i.productid.dis_price)*int(i.quantity)
+                    a = a+int(i.productid.total_disprice)*int(i.quantity)
+                    subtotal = subtotal+ int(i.productid.total_disprice)*int(i.quantity)
                 else:
                     a = a+int(i.productid.price)*int(i.quantity)
                     subtotal = subtotal+ int(i.productid.price)*int(i.quantity)

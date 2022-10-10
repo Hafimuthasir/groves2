@@ -17,6 +17,7 @@
 </head>
 <body class="container">
     {% block content %}
+    {% if prod != "None" %}
    {% comment %} <h1>hello world</h1><br>
    <a href="{% url 'logout' %}">Logout</a> {% endcomment %}
    {% comment %} <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -159,23 +160,25 @@
             </button>
              {% endcomment %}
           </div>
-  
+          
           <div class="flex-w flex-c-m m-tb-10">
+            {% if searchfunc != True %}
             <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
               <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-              <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+              {% comment %} <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i> {% endcomment %}
                Filter
             </div>
+            {% endif %}
   
-            <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+            {% comment %} <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
               <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
               <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
               Search
-            </div>
+            </div> {% endcomment %}
           </div>
           
 				<!-- Search product -->
-        <form method="POST">
+        {% comment %} <form method="POST" action="{% url 'search' %}">
           {% csrf_token %}
 				<div class="dis-none panel-search w-full p-t-10 p-b-15">
 					<div class="bor8 dis-flex p-l-15">
@@ -183,10 +186,10 @@
 							<i class="zmdi zmdi-search"></i>
 						</button>
 
-						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
+						<input class="mtext-107 cl2 size-114 plh2 p-r-15" style="opacity:0%;" type="text" name="search-product" placeholder="Search">
 					</div>	
 				</div>
-      </form>
+      </form> {% endcomment %}
 				<!-- Filter -->
                 <form method="POST">
                     {% csrf_token %}
@@ -268,7 +271,7 @@
 										<i class="zmdi zmdi-circle"></i>
 									</span> {% endcomment %}
 
-									<a href="{% url 'filterbycar' i.id %}" class="filter-link stext-106 trans-04">
+									<a href="{% url 'filterbycar' i.carbrand %}" class="filter-link stext-106 trans-04">
 										{{i.carbrand}}
 									</a>
 								</li>
@@ -287,15 +290,15 @@
 							<div class="flex-w p-t-4 m-r--5">
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									Fashion
-								</a>
+								</a>  
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									Lifestyle
-								</a>
+								</a> 
 
-								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+								 <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									Denim
-								</a>
+								</a> 
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									Streetstyle
@@ -303,8 +306,8 @@
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
 									Crafts
-								</a>
-							</div>
+								</a> 
+							</div> 
 						</div>
 					</div>
 				</div>
@@ -319,8 +322,11 @@
 					<div class="block2 shadow p-3 mb-5 bg-body rounded" style="height:23rem;">
             
 						<div class="block2-pic hov-img0 ">
+              {% if i.image != None %}
 						<a href="detail/{{i.id}}">	<img src="{{i.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT"></a>
-
+              {% else %}
+              <a href="detail/{{i.id}}">	<img src="None" height="200px" width="200px" alt="IMG-PRODUCT"></a>
+              {% endif %}
 							{% comment %} <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
 								Quick View
 							</a> {% endcomment %}
@@ -490,6 +496,9 @@
           {% endfor %} {% endcomment %}
           <br>
           <br>
+          {% else %}
+          <h1>No result found </h1>
+          {% endif %}
     {% endblock %}
 </body>
 </html>

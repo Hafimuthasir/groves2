@@ -11,7 +11,59 @@
 <body>
     {% block content %}
     
-
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Add Category</h4>
+          <p class="card-description">  </p>
+          <form method = 'POST' class="forms-sample" enctype="multipart/form-data">
+            {%csrf_token%} 
+  
+            {% comment %} <div class="form-group row">
+              <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Category</label>
+              <div class="col-sm-9">
+              <select name="category" class="form-control" id="exampleFormControlSelect1">
+                {% for i in datas %}
+                <option value="{{i.id}}">{{i.categoryname}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            </div> {% endcomment %}
+  
+  
+            <div class="form-group row">
+              <div class="col-sm-9">
+  
+                Category name : <input class="form-control" name="addcategory" type="text" placeholder="Enter the name of the category" />
+            
+                
+            
+  {% comment %} 
+                Percentage : <input id="OtherCheckBox" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                Price : <input id="OtherCheckBox2" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                <input id="OtherTextBox" class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" style="display:none" />
+            
+                
+                <input id="OtherTextBox2" class="form-control" name="disprice" type="text" placeholder="Enter the Discount Price" style="display:none" />
+             {% endcomment %}
+              </div>
+            </div>
+  
+            {% comment %} <div class="form-group row">
+              <label for="exampleInputMobile" class="col-sm-3 col-form-label">Discount Price</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" name="description" required id="exampleInputMobile" placeholder="Product Description">
+              </div>
+            </div>
+          {% endcomment %}
+          <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 1</label>
+          
+          <input type="file" class="form-control-file" required name="image" id="exampleFormControlFile1">
+          <br><input type="submit" class="btn btn-primary" value="Add">
+          </form>
+        </div>
+      </div>
+    </div>
 
 
     <div class="page-header">
@@ -35,7 +87,8 @@
                 <thead>
                   <tr>
                     <th >id</th>
-                    <th >Categories</th>
+                    <th>Category</th>
+                    {% comment %} <th >Categories</th> {% endcomment %}
                     <th >Delete</th>
                     <th >Update</th>
                   </tr>
@@ -44,13 +97,18 @@
                   {% for i in cats %}
                   <tr>
                     <td>{{i.id}}</td>
-                <td>{{i.categoryname}}</td>
+                    {% if i.image %}
+                    <td><img src="{{i.image.url}}" alt="image">&nbsp{{i.categoryname}}</td>
+                    {% else %}
+                    <td>{{i.categoryname}}</td>
+                    {% endif %}
+                {% comment %} <td>{{i.categoryname}}</td> {% endcomment %}
                 <td>
-                  <a href="#" class="btn btn-danger" style="border-radius: 16px;">Delete</a>
+                  <a href="{% url 'deletecategory' i.id %}" class="btn btn-danger" style="border-radius: 16px;">Delete</a>
 
                 </td>
                 <td>
-                  <a href="#" class="btn btn-success" style="border-radius: 16px;">Edit</a>
+                  <a href="{% url 'editcategory' i.id %}" class="btn btn-success" style="border-radius: 16px;">Edit</a>
 
                 </td>
                 
@@ -62,13 +120,20 @@
           </div>
         </div>
       </div>
-      <form method="POST">
+      {% comment %} <form method="POST">
         {%csrf_token%}
-        &nbsp&nbsp&nbsp<input type="text" name="addcategory" placeholder="category name">
-        <input type="submit" value="Add">
-    
+       
+        <div class="form-group row">
+          &nbsp&nbsp&nbsp<input type="text" name="addcategory" placeholder="category name">
+          
+          <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 1</label>
+          <div class="col-sm-9">
+          <input type="file" class="form-control-file" required name="image" id="exampleFormControlFile1">
+          <input type="submit" value="Add">  
+        </div>
+        </div>
     </form>
-  </div>
+  </div> {% endcomment %}
     {% endblock %}
 
 </body>

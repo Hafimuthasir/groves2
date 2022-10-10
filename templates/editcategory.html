@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block content %}
+    
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Add Category</h4>
+          <p class="card-description">  </p>
+          <form method = 'POST' class="forms-sample" enctype="multipart/form-data">
+            {%csrf_token%} 
+  
+            {% comment %} <div class="form-group row">
+              <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Category</label>
+              <div class="col-sm-9">
+              <select name="category" class="form-control" id="exampleFormControlSelect1">
+                {% for i in datas %}
+                <option value="{{i.id}}">{{i.categoryname}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            </div> {% endcomment %}
+  
+  
+            <div class="form-group row">
+              <div class="col-sm-9">
+  
+                Category name : <input class="form-control" name="category" type="text" placeholder="Enter the name of the category" />
+            
+                
+            
+  {% comment %} 
+                Percentage : <input id="OtherCheckBox" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                Price : <input id="OtherCheckBox2" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                <input id="OtherTextBox" class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" style="display:none" />
+            
+                
+                <input id="OtherTextBox2" class="form-control" name="disprice" type="text" placeholder="Enter the Discount Price" style="display:none" />
+             {% endcomment %}
+              </div>
+            </div>
+  
+            {% comment %} <div class="form-group row">
+              <label for="exampleInputMobile" class="col-sm-3 col-form-label">Discount Price</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" name="description" required id="exampleInputMobile" placeholder="Product Description">
+              </div>
+            </div>
+          {% endcomment %}
+          <label for="exampleFormControlSelect1" class="col-sm-3 col-form-label">Upload Image 1</label>
+          
+          <input type="file" class="form-control-file" required name="image" id="exampleFormControlFile1">
+          <br><input type="submit" class="btn btn-primary" value="Add">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}

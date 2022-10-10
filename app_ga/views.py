@@ -36,21 +36,22 @@ from django.db.models import Sum
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
     
-    product = products.objects.distinct('carbrand')
+    product = carbrands.objects.all()
     allcates=categories.objects.all()
     if 'search-product' in request.POST:
             q=request.POST['search-product']
             searchwith=Q(Q(productname__icontains=q)|Q(prodbrand__icontains=q))
-            prod=products.objects.filter(searchwith)
+            prod=products.objects.filter(searchwith) 
     else:
             prod = products.objects.all().order_by('id')
 
         # prod = products.objects.all()
-    p = Paginator(prod, 4)
+    p = Paginator(prod, 8)
     page = request.GET.get('page')
     prod = p.get_page(page)
     nums = "a" * prod.paginator.num_pages
     logedin = True
+    recent = recent_products.objects.all().order_by('products','-id').distinct('products')[:4][::-1]
     if 'username' in request.session:
         logedin = True
         use = request.session.get('username')
@@ -58,7 +59,28 @@ def index(request):
         recent = recent_products.objects.filter(user = userid).order_by('products','-id').distinct('products')[:4][::-1]
         for i in recent:
             print("'yyy",i.id)
-        
+    for i in prod:
+
+        if i.total_disprice:
+            dprice = i.total_disprice
+            price = i.price
+            off = int(i.price) - int(i.total_disprice)
+            perc=off/int(i.price)*100
+            perc = round(perc)
+            print(i.productname,i.price,i.total_disprice)
+            print("llll",perc)
+            i.disperc = perc
+            i.save()
+            # prod = products.objects.all()
+    
+    
+    if 'username' in request.session:
+        logedin = True
+        use = request.session.get('username')
+        userid = myusers.objects.get(username = use)
+        recent = recent_products.objects.filter(user = userid).order_by('products','-id').distinct('products')[:4][::-1]
+        for i in recent:
+            print("'yyy",i.id)
     elif 'otp' in request.session:
         logedin = True
         
@@ -307,13 +329,17 @@ def addproduct(request):
         selecarbr=caropts.carbrand
         probj.carbrand=selecarbr
         
-        probj.prodbrand = request.POST.get('prodbrand')
-        probj.prodbrand = 1
-        sel=1
+        prdbr = request.POST.get('productbrand')
+        print("this is it",prdbr)
+        
+        prdbrand= prodbrands.objects.get(id = prdbr)
+        probj.prodbrand = prdbrand.productbrand
+        # probj.prodbrand = 1
+        # sel=1
         # brandopts = prodbrands.objects.get(brobj.productbrand=probj.prodbrand)
         
-        brandopts=prodbrands.objects.get(id=sel)
-        probj.prodid = brandopts
+        # brandopts=prodbrands.objects.get(productbrand=)
+        probj.prodid = prdbrand
 
         
         probj.image = request.FILES.get('image')
@@ -336,17 +362,54 @@ def addcategory(request):
     
     allcat = categories.objects.all()
     if request.method=="POST":
-        cate=request.POST.get('addcategory')        
+        cate=request.POST.get('addcategory')
+        image=request.FILES.get('image')
         if categories.objects.filter(categoryname=cate).exists():
             # message.info("Category already exist")
             sweetify.error(request,"Category Already exist")
             print("thid if working")
         else:
-            add=categories.objects.create(
-            categoryname=cate
-            )
+            # add=categories.objects.create(
+            # categoryname=cate,
+            # image=image
+            # )
+            add = categories()
+            add.categoryname = cate
+            add.image = image
             add.save()
     return render(request,'addcategory.html',{'cats':allcat})
+
+def deletecategory(request,id):
+    cate = categories.objects.get(id=id)
+    cate.delete()
+    return redirect(addcategory)
+
+def editcategory(request,id):
+    cate = categories.objects.get(id=id) 
+    if request.method == "POST":
+        category = request.POST.get("category")
+        image = request.FILES.get("image")
+        cate.categoryname = category
+        cate.image = image
+        cate.save()
+        return redirect(addcategory)
+    return render(request,'editcategory.html')
+
+def deletecarbr(request,id):
+    cate = carbrands.objects.get(id=id)
+    cate.delete()
+    return redirect(addcategory)
+
+def editcarbr(request,id):
+    cate = carbrands.objects.get(id=id) 
+    if request.method == "POST":
+        category = request.POST.get("carbr")
+        image = request.FILES.get("image")
+        cate.carbrand = category
+        cate.carlogo = image
+        cate.save()
+        return redirect(carbrandman)
+    return render(request,'editcarbr.html')
 
 def productlist(request):
     if 'search-product' in request.POST:
@@ -490,6 +553,7 @@ def brandman(request):
     allbrand = prodbrands.objects.all()
     if request.method=="POST":
         brand=request.POST.get('addbrand')
+        # image=request.POS.get('brandlogo')
         if prodbrands.objects.filter(productbrand=brand).exists():
             message.warning("Brand already exist")
         else:
@@ -499,6 +563,20 @@ def brandman(request):
             add.save()
     return render(request,'brandman.html',{'brand':allbrand})
 
+def carbrandman(request):
+    allcarbr = carbrands.objects.all()
+    if request.method=="POST":
+        carbr = request.POST.get('carbr')
+        image = request.FILES.get('image')
+        if carbrands.objects.filter(carbrand=allcarbr).exists():
+            message.warning("already exist!!")
+        else:
+            add = carbrands()
+            add.carbrand = carbr
+            add.carlogo = image
+            add.save()
+    return render(request,'carbrandman.html',{'brand':allcarbr})
+
 def cartlist(request):
     if 'username' in request.session:
         logedin=True
@@ -507,8 +585,8 @@ def cartlist(request):
         cartitems=cart.objects.filter(userid = user.id)
         a=0
         for i in cartitems:
-            if i.productid.dis_price :
-                a = a+int(i.productid.dis_price)*int(i.quantity)
+            if i.productid.total_disprice :
+                a = a+int(i.productid.total_disprice)*int(i.quantity)
             else:
                 a = a+int(i.productid.price)*int(i.quantity)
     return render(request,'cartlist2.html',{'cartdat':cartitems,'price':a,'logedin':logedin})
@@ -624,19 +702,54 @@ def changepassword(request,id):
                 sweetify.error(request,"Please fill all the Fields")
         return render (request,'changepassword.html',{'logedin':logedin})
 
+
+def search(request):
+    if 'username' in request.session:
+        logedin = True
+    else:
+        logedin = False
+
+    q = request.POST.get('search-product')
+    print("fdsfdsfdfdfdsfsfsfdsfsdf",q)
+    searchwith=Q(Q(productname__icontains=q)|Q(prodbrand__icontains=q))
+    prod=products.objects.filter(searchwith)
+    for i in prod :
+        print("ggg",i.productname)
+    for i in prod:
+
+        if i.total_disprice:
+            dprice = i.total_disprice
+            price = i.price
+            off = int(i.price) - int(i.total_disprice)
+            perc=off/int(i.price)*100
+            perc = round(perc)
+            print(i.productname,i.price,i.total_disprice)
+            print("llll",perc)
+            i.disperc = perc
+            i.save()
+            # prod = products.objects.all()
+    p = Paginator(prod, 4)
+    page = request.GET.get('page')
+    prod = p.get_page(page)
+    nums = "a" * prod.paginator.num_pages
+
+    searchfunc = True
+    return render(request,'products_main.html',{'datas': prod,'nums':nums,'logedin':logedin,'searchfunc':searchfunc})
+
 def products_main(request):
         product = products.objects.distinct('carbrand')
         allcates=categories.objects.all()
         
-        if 'search-product' in request.POST:
-                q=request.POST['search-product']
-                searchwith=Q(Q(productname__icontains=q)|Q(prodbrand__icontains=q))
-                prod=products.objects.filter(searchwith)
-                print('search function')
+        # if 'search-product' in request.POST:
+        #         q=request.POST['search-product']
+        #         searchwith=Q(Q(productname__icontains=q)|Q(prodbrand__icontains=q))
+        #         prod=products.objects.filter(searchwith)
+        #         print('search function')
                 
-        else:
-                print('normal function')
-                prod = products.objects.all().order_by('id')
+                
+        
+        print('normal function')
+        prod = products.objects.all().order_by('id')
                 # off=[]
                 # for i in prod:
                 #     if i.total_disprice:
@@ -650,14 +763,6 @@ def products_main(request):
                 # print("dscda",off)
         for i in prod:
 
-            # if i.distype == "percentage":
-            #     dis
-            #     diperc =  disperc
-            # else :
-            #         c=int(i.price)
-            #         d=int(i.total_disprice)
-            #         e=c-d
-            #         diperc = e/c*(100)
             if i.total_disprice:
                 dprice = i.total_disprice
                 price = i.price
@@ -722,13 +827,13 @@ def filterbycar(request,id):
     else:
         logedin = False
     allcates=categories.objects.all()
-    product = products.objects.distinct('carbrand')
+    product = carbrands.objects.all()
     
     print('filter button')
-
-    seleprod = products.objects.get(id=id)
-    print("YYYYAAAA",seleprod.carbrand)
-    prod = products.objects.filter(carbrand = seleprod.carbrand)
+    print(id)
+    carbr = carbrands.objects.get(carbrand=id)
+    print("YYYYAAAA",carbr.carbrand)
+    prod = products.objects.filter(carbrid = carbr)
     print(prod)
     
         # prod = products.objects.all()
@@ -859,9 +964,22 @@ def delete_coupon(request,id):
     return redirect(couponman)
 
 def shopbycar(request):
+    if 'username' in request.session:
+        logedin = True
+    else:
+        logedin = False
     brands = carbrands.objects.all()
-    return render(request,'shopbycar.html',{'carbrand':brands})
+    for i in brands:
+        print("dsd",i.carbrand)
+    return render(request,'shopbycar.html',{'carbrand':brands,'logedin':logedin})
 
+def shopbycategory(request):
+    if 'username' in request.session:
+        logedin=True
+    else:
+        logedin=False
+    cate = categories.objects.all()
+    return render(request,'shopbycategory.html',{'cate':cate,'logedin':logedin})
 # sales per day...............
 # def sales(request):
 #     if 'date' in request.GET:

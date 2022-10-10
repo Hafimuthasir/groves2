@@ -285,6 +285,28 @@
           </div>
           <hr>
   
+          
+            <div class="row" >
+              <h1> Categories </h1>
+        {% for i in cate %}
+        {% comment %} <div class="col-lg-3" style="width:20rem;pading-left:10px;"> {% endcomment %}
+        <div class="card col-md-2 shadow p-3 mb-5 bg-white rounded" style="margin-bottom:5%;margin:1%;">
+            <a href="{% url 'filter' i.id %}">
+                {% if i.image %}
+            <img class="card-img-top" style="width:130px;height:150px;margin-left:3%;"src="{{i.image.url}}" alt="Card image cap">
+            {% endif %}
+            <div class="card-body" style="text-align:center;">
+              <h5 class="card-title text-dark" style="width:100px;">{{i.categoryname}}</h5>
+            </a>
+            </div>
+          </div>
+        {% comment %} </div> {% endcomment %}
+        
+           {% endfor %}
+        </div>
+
+        <hr>
+        <br>
         <div class="flex-w flex-sb-m p-b-52">
           <div class="flex-w flex-l-m filter-tope-group m-tb-10">
             <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
@@ -316,19 +338,19 @@
           <div class="flex-w flex-c-m m-tb-10">
             <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
               <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-              <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
+              {% comment %} <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i> {% endcomment %}
                Filter
             </div>
   
-            <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+            {% comment %} <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
               <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
               <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
               Search
-            </div>
+            </div> {% endcomment %}
           </div>
           
 				<!-- Search product -->
-        <form method="POST">
+        {% comment %} <form method="POST" action="{% url 'search' %}">
           {% csrf_token %}
 				<div class="dis-none panel-search w-full p-t-10 p-b-15">
 					<div class="bor8 dis-flex p-l-15">
@@ -339,7 +361,7 @@
 						<input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
 					</div>	
 				</div>
-      </form>
+      </form> {% endcomment %}
 				<!-- Filter -->
                 <form method="POST">
                     {% csrf_token %}
@@ -421,7 +443,7 @@
 										<i class="zmdi zmdi-circle"></i>
 									</span> {% endcomment %}
 
-									<a href="{% url 'filterbycar' i.id %}" class="filter-link stext-106 trans-04">
+									<a href="{% url 'filterbycar' i.carbrand %}" class="filter-link stext-106 trans-04">
 										{{i.carbrand}}
 									</a>
 								</li>
@@ -439,23 +461,23 @@
 
 							<div class="flex-w p-t-4 m-r--5">
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Fashion
+									Breakpads
 								</a>
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Lifestyle
+									Toyota
 								</a>
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Denim
+									suzuki
 								</a>
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Streetstyle
+									alto
 								</a>
 
 								<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-									Crafts
+									bmw
 								</a>
 							</div>
 						</div>

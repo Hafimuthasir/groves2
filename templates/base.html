@@ -36,7 +36,14 @@
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="index.html"><img src="{% static '/images/logo.png' %}" alt="logo" /></a>
+          {% comment %} <a class="sidebar-brand brand-logo" href="index.html"><img src="{% static '/images/logo.png' %}" alt="logo" /></a> {% endcomment %}
+          <a class="sidebar-brand brand-logo" style="text-decoration:none;" href="#">
+            {% comment %} <a href="#" class="logo aa" style="text-decoration:none;"> {% endcomment %}
+              {% comment %} <img src="{% static 'images/logo.png' %}" width="100px;" height="30px;" alt="IMG-LOGO"> {% endcomment %}
+			  <h2 class="text-danger">Groves</h2>
+			  <p class="text-muted fw-bold" style="line-height:1px;margin-bottom:5px;margin-left:36px;">autoparts<br></p>
+			
+          </a>
           <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{% static '/images/logo.png' %}" alt="logo" /></a>
         </div>
         <ul class="nav">
@@ -141,6 +148,16 @@
               <span class="menu-title">Brand Management</span>
             </a>
           </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{% url 'carbrandman' %}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Car Brand Management</span>
+            </a>
+          </li>
+
           <li class="nav-item menu-items">
             <a class="nav-link" href="{% url 'orderman' %}">
               <span class="menu-icon">
@@ -226,13 +243,13 @@
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
               <span class="mdi mdi-menu"></span>
             </button>
-            <ul class="navbar-nav w-100">
+            {% comment %} <ul class="navbar-nav w-100">
               <li class="nav-item w-100">
                 <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                   <input type="text" class="form-control" placeholder="Search products">
                 </form>
               </li>
-            </ul>
+            </ul> {% endcomment %}
             <ul class="navbar-nav navbar-nav-right">
               <li class="nav-item dropdown d-none d-lg-block">
                 {% comment %} <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a> {% endcomment %}
@@ -310,7 +327,7 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
-                      <img src="{% static 'superuser/assets/images/faces/face15.jpg' %}" alt="image" class="rounded-circle profile-pic">
+                      <img src="{% static 'superuser/assets/images/faces/face16.jpg' %}" alt="image" class="rounded-circle profile-pic">
                     </div>
                     <div class="preview-item-content">
                       <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
@@ -371,7 +388,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="{% static 'superuser/assets/images/faces/face15.jpg' %}" alt="">
+                    <img class="img-xs rounded-circle" src="{% static 'images/user.svg.png' %}" alt="">
                     <p class="mb-0 d-none d-sm-block navbar-profile-name">Hafi Muthasir</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>

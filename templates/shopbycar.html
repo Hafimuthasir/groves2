@@ -19,21 +19,40 @@
     {% block content %}
     <br><br><br><br>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row" style="padding-left:5%;">
             {% for i in carbrand %}
-            <div class="col-lg-3" style="margin-bottom:2%;">
-            <a href="{% url 'filterbycar' i.id %}">
-    <div class="card" style="width: 17rem;">
-        <img class="{{i.carlogo.url}}" src="..." alt="Card image cap">
-        <div class="card-body">
-          <p class="card-text">{{i.carbrand}}</p>
+            <div class="col-lg-3 col-sm-6" style="margin-bottom:2%;">
+            <a href="{% url 'filterbycar' i.carbrand %}">
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 17rem;">
+        
+        <img class="" src="{{i.carlogo.url}}" style="height:140px; width:170px; margin-left:13%" alt="Card image cap">
+        <div class="card-body" style="text-align:center;">
+          {% comment %} <p class="card-title text-dark" style="text-decoration:none;">{{i.carbrand}}</p> {% endcomment %}
         </div>
       </div>
     </a></div>
         {% endfor %}
-    <br>
+    <br></div></div>
 
-       
+    {% comment %} <br><br><br><br>
+    <div class="container-fluid">
+        <div class="row" style="padding-left:11%;">
+    {% for i in carbrand %}
+    {% comment %} <div class="col-lg-3" style="width:20rem;pading-left:10px;"> {% endcomment %}
+    {% comment %} <div class="card" style="width:16rem;margin-bottom:5%;margin:2%;">
+        <a href="{% url 'filterbycar' i.id %}">
+            {% if i.carlogo %}
+        <img class="card-img-top" style="width:150px;height:150px;margin-left:12%;"src="{{i.carlogo.url}}" alt="Card image cap">
+        {% endif %}
+        <div class="card-body" style="text-align:center;">
+          <h5 class="card-title text-dark">{{i.carbrand}}</h5>
+        </a>
+        </div>
+      </div> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
+    
+       {% comment %} {% endfor %}
+    </div></div> {% endcomment %} 
         
     {% endblock %}
 </body>
