@@ -11,6 +11,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.cache import cache_control
 from .models import *
 from order.models import *
+from order.views import *
 import random
 from twilio.rest import Client
 from django.core.paginator import Paginator
@@ -112,7 +113,20 @@ def login(request):
             usercheck = myusers.objects.get(username=username)
             if usercheck.status == False:
                  request.session['username'] = username
-                 messages.success(request,"You have logged in successfully")
+                 if 'guest' in request.session:
+                    guest = request.session['guest']
+                    print(guest)
+                    print('quest')
+                    
+                    gcart = guest_cart.objects.filter(user_session=guest)
+                    for i in gcart:
+                        cartobj = cart()
+                        cartobj.quantity = i.quantity
+                        cartobj.productid = i.productid
+                        cartobj.userid = usercheck
+                        cartobj.save()
+                    del request.session['guest']
+                    gcart.delete()
                  return redirect('index')
             else:
                 messages.error(request, 'You are blocked')
@@ -332,7 +346,7 @@ def addproduct(request):
         prdbr = request.POST.get('productbrand')
         print("this is it",prdbr)
         
-        prdbrand= prodbrands.objects.get(id = prdbr)
+        prdbrand= prodbrands.objects.get(productbrand = prdbr)
         probj.prodbrand = prdbrand.productbrand
         # probj.prodbrand = 1
         # sel=1
@@ -477,7 +491,8 @@ def prodetail(request,id):
                         addcart.save()
                         sweetify.success(request,'Item added to cart')
                         return redirect(prodetail,id)
-
+                
+            
                 if request.POST.get('wishlist_button'):
                     print("button clicked")
                     username=request.session.get('username')
@@ -489,12 +504,15 @@ def prodetail(request,id):
                         quantity = quantity
                     )
                     addwish.save()
-    else:
-        print("hello")
-        if request.method == "POST" :
-            print("hi")
-            if request.POST.get('cartbt'):
-                print("Guest Cart")
+    if logedin == False:
+        guest = request.session.get('guest')
+        gexist = guest_cart.objects.filter(user_session = guest,productid=product).exists()
+        if gexist:
+            incart=True
+        else:
+            incart=False
+        
+
             # return redirect(login)        
     # return render(request,'homebase.html',{'datas': product})
     return render(request,'detailproduct.html',{'datas': product,'incart':incart,'logedin':logedin})
@@ -568,8 +586,9 @@ def carbrandman(request):
     if request.method=="POST":
         carbr = request.POST.get('carbr')
         image = request.FILES.get('image')
-        if carbrands.objects.filter(carbrand=allcarbr).exists():
-            message.warning("already exist!!")
+        exist = carbrands.objects.filter(carbrand=carbr)
+        if exist:
+            messages.error(request,"already exist!!")
         else:
             add = carbrands()
             add.carbrand = carbr
@@ -580,16 +599,23 @@ def carbrandman(request):
 def cartlist(request):
     if 'username' in request.session:
         logedin=True
+        print("lllolo")
         username = request.session.get('username')
         user=myusers.objects.get(username=username)
         cartitems=cart.objects.filter(userid = user.id)
+        for i in cartitems:
+            print(i)
         a=0
         for i in cartitems:
             if i.productid.total_disprice :
                 a = a+int(i.productid.total_disprice)*int(i.quantity)
             else:
                 a = a+int(i.productid.price)*int(i.quantity)
-    return render(request,'cartlist2.html',{'cartdat':cartitems,'price':a,'logedin':logedin})
+    else:
+        guser = request.session.get('guest')
+        cartitems = guest_cart.objects.filter()
+        return render(request,'csrtlist2.html',{'cart':cartitems,'price':a,'logedin':False})
+    return render(request,'cartlist2.html',{'cart':cartitems,'price':a,'logedin':logedin})
 
 def wishlistt(request):
     # sum=0
@@ -1474,3 +1500,75 @@ def export_to_pdf(request):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
     return response
+
+
+# guest cart
+def add_cart_guest(request,pid):
+    print("entered")
+    if 'guest' in request.session:
+        print("guest")
+        prod = products.objects.get(id=pid)
+        gcart = guest_cart()
+        gcart.user_session = request.session['guest']
+        gcart.productid = prod
+        gcart.quantity = 1
+        gcart.save()
+        print("no use")
+    else:
+        print("guest else")
+        prod = products.objects.get(id=pid)
+        S=10
+        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S)) 
+        guser_session = str(ran)
+        request.session['guest'] = guser_session
+        gcart = guest_cart()
+        gcart.user_session = guser_session
+        gcart.productid = prod
+        gcart.quantity = 1
+        gcart.save()
+    return redirect(gcart_view)
+
+def gcart_view(request):
+    logedin = False
+    guser = request.session.get('guest')
+    print("guser",guser)
+    cart = guest_cart.objects.filter(user_session=guser)
+    a=0                                                          
+    for i in cart:
+        if i.productid.total_disprice:
+            a = a+i.productid.total_disprice*int(i.quantity)
+        else :
+            a = a+i.productid.price*int(i.quantity)
+
+    if request.method == "POST":
+        if cart:
+            return redirect(checkout)
+        else:
+            return redirect(cartlist)
+    return render(request,'cartlist2.html',{'cart':cart,'price':a,'logedin':logedin})
+
+def gcart_update(request):
+   body = json.loads(request.body)
+   cart = guest_cart.objects.get(id=body['cart_id'])
+   cart.quantity = body['product_qty']
+   cart.save()
+   print("cart_test",body)
+   print("update cart")
+   return redirect(gcart_view)
+
+def gcart_update(request):
+   print('cart')
+   body = json.loads(request.body)
+   cartv = guest_cart.objects.get(id=body['cart_id'])
+   
+   cartv.quantity = body['product_qty']
+   cartv.total_price = body['total']
+   cartv.save()
+   print("cart_test",body)
+   print("update cart")
+   return redirect(cartlist)
+
+def gcart_remove(request,id):
+    gcart = guest_cart.objects.get(id=id)
+    gcart.delete()
+    return redirect(gcart_view)

@@ -270,20 +270,20 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
-					<div class="m-l-25 m-r--38 m-lr-0-xl">
+					<div class="m-l-25 m-r--38 m-lr-0-xl ">
 						<div class="wrap-table-shopping-cart" style="overflow-x:hidden;">
-              {% if cartdat %}
-							<table class="table-shopping-cart">
+              {% if cart %}
+							<table class="table-shopping-cart ">
 								<tr class="table_head">
 									<th class="column-1">Product</th>
 									<th class="column-2"></th>
-									<th class="column-3">&nbspPrice</th>
+									<th class="column-3">&nbsp;Price</th>
 									<th class="column-4">Quantity</th>
                   {% comment %} <th class="column-4">offer price</th> {% endcomment %}
 									<th class="column-5"></th>
 								</tr>
                 
-                {% for i in cartdat %}
+                {% for i in cart %}
 								<tr class="table_row">
 									<td class="column-1">
 										<div class="how-itemcart1">
@@ -304,14 +304,14 @@
                         
                          {% comment %} <a style="text-decoration:None;" href="sub/{{i.id}}/{{i.pid.id}}"><</a> {% endcomment %}
                        
-                         <button class="changeQuantity decrement-btn btn btn-primary" style="margin-left:30px;">-</button>
+                         <button class="changeQuantity decrement-btn btn btn-dark" style="margin-left:30px;border-radius:0px;">-</button>
                         
                      
                          
                         <input class="qty-input" type="text" style="border:none;text-align:center;background-color: #a6a8ab" value="{{ i.quantity }}" size="1" name="qty">
                          
                      
-                         <button  id="increment-btn"  class="changeQuantity increment-btn btn btn-primary">+</button>
+                         <button  id="increment-btn"  style="border-radius:0px;"class="changeQuantity increment-btn btn btn-dark">+</button>
                        
                         
 
@@ -342,9 +342,12 @@
 										
                   </div>
 									</td>
+                  {% if logedin == True %}
 									<td class="column-5"><a href="{% url 'remove_cart' i.id %}"class="btn btn-danger">Remove</a></td>
-                
-								</tr>
+                {% else %}
+                <td class="column-5"><a href="{% url 'gcart_remove' i.id %}"class="btn btn-danger">Remove</a></td>
+							{% endif %}	
+              </tr>
                 {% endfor %}
 							</table>
 						</div>
@@ -365,19 +368,19 @@
 					</div>
 				</div>
 
-				<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-						<h4 class="mtext-109 cl2 p-b-30">
+				<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50 ">
+					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm shadow p-3 mb-5 bg-white rounded">
+						<h4 class="mtext-109 cl2 p-b-30" style="text-align:center;">
 							Cart Total
 						</h4>
-
+            <hr>
 						<div class="flex-w flex-t bor12 p-b-13">
 							<div class="size-208">
 								<span class="stext-110 cl2">
 									Subtotal:
 								</span>
 							</div>
-
+             
 							<div class="hai size-209">
                 <span>
                   
@@ -417,7 +420,7 @@
 							<div class="size-209 p-t-1">
 								<span class="mtext-110 cl2">
 									{% comment %} Rs. {{price}} {% endcomment %}
-                  <input type="text" readonly value="Rs. {{price}}" class="sub">
+                  <input type="text" readonly value="Rs.{{price}}" style="width:100px;" class="sub">
 								</span>
 							</div>
 						</div>
@@ -466,7 +469,7 @@
 {% endfor %}
 
       <script>
-        var url = '{% url 'cart_update' %}'
+        var url = '{% url 'gcart_update' %}'
         
         $(document).ready(function(){
            

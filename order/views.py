@@ -3,7 +3,8 @@ from django.shortcuts import render,redirect
 from app_ga.models import *
 from app_ga import views
 from .models import *
-from app_ga.views import*
+from app_ga.views import *
+from app_ga.views import login
 import datetime
 import json
 import io
@@ -210,6 +211,8 @@ def checkout(request):
 
         else:
             return render(request,'cartlist.html')
+    else :
+        return redirect('login')
     
     return render(request,'checkout.html',{'cart':cartitems,'total':a,'coupstat':coupstat,'disprice':disprice,'subtotal':subtotal,'address':address,'wallet':wall,'logedin':logedin})
 

@@ -60,9 +60,18 @@
 			{% comment %} <input value=1 type="number"> {% endcomment %}
 			{% if incart == True %}
 			<p style="color:blue;">Item already in your Cart</p>
+			{% if logedin == True %}
 			<a href="{% url 'cartlist' %}" class="btn btn-success">Go to Cart</a>
-            {% else %}
+			{% else %}
+			<a href="{% url 'gcart_view' %}" class="btn btn-success">Go to Cart</a>
+            {% endif %}
+			{% else %}
+			
+			{% if logedin == False %}
+			<a href="{% url 'add_cart_guest' datas.id %}" class="btn btn-warning">Add to cart</a>
+			{% else %}
 			<input type="submit" name="cartbt" class="btn btn-primary" value="Add to Cart">
+			{% endif %}
 			{% endif %}
 			<input type="submit" name="wishlist_button" class="btn btn-danger" value="Add to wishlist">
             </form>
