@@ -205,7 +205,7 @@ def checkout(request):
                 if payment_method == 'razorpay':
                       return redirect(payment_methods_razorpay, reg.pk)
                 
-                
+                      print("dfs")   
                 return redirect(ordersuccess)
                 # elif payment_method == 'paypal':
 

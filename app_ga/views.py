@@ -118,7 +118,7 @@ def login(request):
                     print(guest)
                     print('quest')
                     
-                    gcart = guest_cart.objects.filter(user_session=guest)
+                    gcart = guest_cart2.objects.filter(user_session=guest)
                     for i in gcart:
                         cartobj = cart()
                         cartobj.quantity = i.quantity
@@ -656,6 +656,7 @@ def addaddress(request):
             country="india"
             reg=Address.objects.create(user_id=user_id,buyer_name=buyer_name,buyer_phone=buyer_phone,address=address,pincode=pincode,city=city,state=state,country=country)
             reg.save()
+            return redirect(addaddress)
         return render(request,'addaddress.html',{'address':address,'logedin':logedin})
 
 def remove_cart(request,id):
@@ -1508,7 +1509,7 @@ def add_cart_guest(request,pid):
     if 'guest' in request.session:
         print("guest")
         prod = products.objects.get(id=pid)
-        gcart = guest_cart()
+        gcart = guest_cart2()
         gcart.user_session = request.session['guest']
         gcart.productid = prod
         gcart.quantity = 1
@@ -1521,7 +1522,7 @@ def add_cart_guest(request,pid):
         ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S)) 
         guser_session = str(ran)
         request.session['guest'] = guser_session
-        gcart = guest_cart()
+        gcart = guest_cart2()
         gcart.user_session = guser_session
         gcart.productid = prod
         gcart.quantity = 1
@@ -1532,7 +1533,7 @@ def gcart_view(request):
     logedin = False
     guser = request.session.get('guest')
     print("guser",guser)
-    cart = guest_cart.objects.filter(user_session=guser)
+    cart = guest_cart2.objects.filter(user_session=guser)
     a=0                                                          
     for i in cart:
         if i.productid.total_disprice:
@@ -1549,7 +1550,7 @@ def gcart_view(request):
 
 def gcart_update(request):
    body = json.loads(request.body)
-   cart = guest_cart.objects.get(id=body['cart_id'])
+   cart = guest_cart2.objects.get(id=body['cart_id'])
    cart.quantity = body['product_qty']
    cart.save()
    print("cart_test",body)
@@ -1559,7 +1560,7 @@ def gcart_update(request):
 def gcart_update(request):
    print('cart')
    body = json.loads(request.body)
-   cartv = guest_cart.objects.get(id=body['cart_id'])
+   cartv = guest_cart2.objects.get(id=body['cart_id'])
    
    cartv.quantity = body['product_qty']
    cartv.total_price = body['total']
@@ -1569,6 +1570,6 @@ def gcart_update(request):
    return redirect(cartlist)
 
 def gcart_remove(request,id):
-    gcart = guest_cart.objects.get(id=id)
+    gcart = guest_cart2.objects.get(id=id)
     gcart.delete()
     return redirect(gcart_view)
