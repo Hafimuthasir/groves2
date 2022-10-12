@@ -291,13 +291,21 @@
 										</div>
 									</td>
 									<td class="column-2">{{i.productid.productname}}</td>
-                  
+                  					{%if i.productid.total_disprice %}
 									<td class="column-3 price" value="{{i.productid.price}}">&nbspRs.{{i.productid.total_disprice}}</td>
+									{% else %}
+									<td class="column-3 price" value="{{i.productid.price}}">&nbspRs.{{i.productid.price}}</td>
+									{% endif %}
 									<td colspan="2">
 										 <div class="product_data">
 
                       <input type='hidden' class='prod_id' value={{i.id}}>
+                      {% if i.productid.total_disprice %}
                       <input type='hidden' class='price' value={{i.productid.total_disprice}}>
+                      {% else %}
+                      <input type='hidden' class='price' value={{i.productid.price}}>
+                      {% endif %}
+
                        {% csrf_token %}
                        <div class=" flex-w m-l-auto m-r-0" >
                      

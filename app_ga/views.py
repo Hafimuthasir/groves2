@@ -113,13 +113,13 @@ def login(request):
             usercheck = myusers.objects.get(username=username)
             if usercheck.status == False:
                  request.session['username'] = username
-<<<<<<< HEAD
+
                  if 'guest' in request.session:
                     guest = request.session['guest']
                     print(guest)
                     print('quest')
                     
-                    gcart = guest_cart.objects.filter(user_session=guest)
+                    gcart = guest_cart2.objects.filter(user_session=guest)
                     for i in gcart:
                         cartobj = cart()
                         cartobj.quantity = i.quantity
@@ -128,8 +128,8 @@ def login(request):
                         cartobj.save()
                     del request.session['guest']
                     gcart.delete()
-=======
->>>>>>> bd74c32f (dsdsds')
+
+
                  return redirect('index')
             else:
                 messages.error(request, 'You are blocked')
@@ -230,7 +230,7 @@ def register(request):
                 if refferal:
                     use = myusers.objects.filter(refferal_code=refferal).exists
                     if use:
-                        se_user = myusers.objects.filter(refferal_code=refferal).exists
+                        se_user = myusers.objects.filter(refferal_code=refferal)
                         if se_user:
                             ref_user = myusers.objects.get(refferal_code=refferal)
                             addbal = wallet.objects.get(user = ref_user.id)
@@ -248,6 +248,7 @@ def register(request):
                             createwall.save()
                     else:
                         print("invalid refferal code")
+                        
 
                 else:
                     user = myusers.objects.create(
@@ -509,7 +510,7 @@ def prodetail(request,id):
                     addwish.save()
     if logedin == False:
         guest = request.session.get('guest')
-        gexist = guest_cart.objects.filter(user_session = guest,productid=product).exists()
+        gexist = guest_cart2.objects.filter(user_session = guest,productid=product).exists()
         if gexist:
             incart=True
         else:
@@ -589,15 +590,14 @@ def carbrandman(request):
     if request.method=="POST":
         carbr = request.POST.get('carbr')
         image = request.FILES.get('image')
-<<<<<<< HEAD
         exist = carbrands.objects.filter(carbrand=carbr)
         if exist:
             messages.error(request,"already exist!!")
-=======
+
         exist= carbrands.objects.filter(carbrand=carbr)
         if exist:
             message.warning("already exist!!")
->>>>>>> bd74c32f (dsdsds')
+
         else:
             add = carbrands()
             add.carbrand = carbr
@@ -665,6 +665,7 @@ def addaddress(request):
             country="india"
             reg=Address.objects.create(user_id=user_id,buyer_name=buyer_name,buyer_phone=buyer_phone,address=address,pincode=pincode,city=city,state=state,country=country)
             reg.save()
+            return redirect(checkout)
         return render(request,'addaddress.html',{'address':address,'logedin':logedin})
 
 def remove_cart(request,id):
@@ -1107,35 +1108,35 @@ def shopbycategory(request):
 #     return response
 
 
-# def export_to_pdf(request):
-#     total_sales = 0
-#     report = sales_report.objects.all()
-#     sales = OrderProduct.objects.filter(status="OutForDelivery").annotate(Count('id'))
+def export_to_pdf(request):
+     total_sales = 0
+     report = SalesReport.objects.all()
+     sales = OrderProduct.objects.all().annotate(Count('id'))
 
-#     for total_sale in report:
-#         total_sales += total_sale.amount
+     for total_sale in report:
+         total_sales += total_sale.productPrice
 
-#     template_path = 'sales_pdf.html'
-#     context = {
-#         'report':report,
-#         'total_amount':total_sales,
-#     }
+     template_path = 'sales_pdf.html'
+     context = {
+         'report':report,
+         'total_amount':total_sales,
+     }
     
-#     # csv file can also be generated using content_type='application/csv
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+     # csv file can also be generated using content_type='application/csv
+     response = HttpResponse(content_type='application/pdf')
+     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
 
-#     template = get_template(template_path)
-#     html = template.render(context)
+     template = get_template(template_path)
+     html = template.render(context)
 
-#     # create a pdf
-#     pisa_status = pisa.CreatePDF(
-#         html, dest=response)
-#     # if error then show some funny view
-#     if pisa_status.err:
-#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
+     # create a pdf
+     pisa_status = pisa.CreatePDF(
+         html, dest=response)
+     # if error then show some funny view
+     if pisa_status.err:
+         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
-#     return response
+     return response
 
     #########################################################################################
 
@@ -1475,41 +1476,41 @@ def export_to_excel(request):
     return response
 
 
-def export_to_pdf(request):
-    prod = products.objects.all()
-    order_count = []
-    # for i in prod:
-    #     count = SalesReport.objects.filter(product_id=i.id).count()
-    #     order_count.append(count)
-    #     total_sales = i.price*count
-    sales = SalesReport.objects.all()
-    total_sales = SalesReport.objects.all().aggregate(Sum('productPrice'))
+# def export_to_pdf(request):
+    # prod = products.objects.all()
+    # order_count = []
+    # # for i in prod:
+    # #     count = SalesReport.objects.filter(product_id=i.id).count()
+    # #     order_count.append(count)
+    # #     total_sales = i.price*count
+    # sales = SalesReport.objects.all()
+    # total_sales = SalesReport.objects.all().aggregate(Sum('productPrice'))
+# 
+# 
+# 
+    # template_path = 'sales_pdf.html'
+    # context = {
+        # 'brand_name':prod,
+        # 'order_count':sales,
+        # 'total_amount':total_sales['productPrice__sum'],
+    # }
+    # 
+    # # csv file can also be generated using content_type='application/csv
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+# 
+    # template = get_template(template_path)
+    # html = template.render(context)
+# 
+    # # create a pdf
+    # pisa_status = pisa.CreatePDF(
+        # html, dest=response)
+    # # if error then show some funny view
+    # if pisa_status.err:
+        # return HttpResponse('We had some errors <pre>' + html + '</pre>')
+# 
+    # return response
 
-
-
-    template_path = 'sales_pdf.html'
-    context = {
-        'brand_name':prod,
-        'order_count':sales,
-        'total_amount':total_sales['productPrice__sum'],
-    }
-    
-    # csv file can also be generated using content_type='application/csv
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-        html, dest=response)
-    # if error then show some funny view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-    return response
-<<<<<<< HEAD
 
 
 # guest cart
@@ -1518,7 +1519,7 @@ def add_cart_guest(request,pid):
     if 'guest' in request.session:
         print("guest")
         prod = products.objects.get(id=pid)
-        gcart = guest_cart()
+        gcart = guest_cart2()
         gcart.user_session = request.session['guest']
         gcart.productid = prod
         gcart.quantity = 1
@@ -1531,7 +1532,7 @@ def add_cart_guest(request,pid):
         ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S)) 
         guser_session = str(ran)
         request.session['guest'] = guser_session
-        gcart = guest_cart()
+        gcart = guest_cart2()
         gcart.user_session = guser_session
         gcart.productid = prod
         gcart.quantity = 1
@@ -1542,7 +1543,7 @@ def gcart_view(request):
     logedin = False
     guser = request.session.get('guest')
     print("guser",guser)
-    cart = guest_cart.objects.filter(user_session=guser)
+    cart = guest_cart2.objects.filter(user_session=guser)
     a=0                                                          
     for i in cart:
         if i.productid.total_disprice:
@@ -1559,7 +1560,7 @@ def gcart_view(request):
 
 def gcart_update(request):
    body = json.loads(request.body)
-   cart = guest_cart.objects.get(id=body['cart_id'])
+   cart = guest_cart2.objects.get(id=body['cart_id'])
    cart.quantity = body['product_qty']
    cart.save()
    print("cart_test",body)
@@ -1569,7 +1570,7 @@ def gcart_update(request):
 def gcart_update(request):
    print('cart')
    body = json.loads(request.body)
-   cartv = guest_cart.objects.get(id=body['cart_id'])
+   cartv = guest_cart2.objects.get(id=body['cart_id'])
    
    cartv.quantity = body['product_qty']
    cartv.total_price = body['total']
@@ -1579,8 +1580,7 @@ def gcart_update(request):
    return redirect(cartlist)
 
 def gcart_remove(request,id):
-    gcart = guest_cart.objects.get(id=id)
+    gcart = guest_cart2.objects.get(id=id)
     gcart.delete()
     return redirect(gcart_view)
-=======
->>>>>>> bd74c32f (dsdsds')
+

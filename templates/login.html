@@ -149,10 +149,10 @@ button{
         <h3>Login</h3>
 
         <label for="username">Username</label>
-        <input type="text" placeholder="Enter Username" name="username" id="username">
+        <input type="text" placeholder="Enter Username" required name="username" id="username">
 
         <label for="password">Password</label>
-        <input type="password" placeholder="Password" name="password" id="password">
+        <input type="password" placeholder="Password"required name="password" id="password">
 
         <button type="submit">Log In</button>
         <p class="message"> <br><a href="{% url 'otplogin' %}" class="text-success" style="text-decoration:none;">Login Using Otp</a></p>
@@ -166,7 +166,7 @@ button{
 <script>
   {% for i in messages %}
 
-  swal("{{i}}","press ok to try again");
+  swal("{{i}}","press ok to proceed");
   
 {% endfor %}
 
