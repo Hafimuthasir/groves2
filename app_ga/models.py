@@ -80,11 +80,14 @@ class cart(models.Model):
     quantity = models.CharField(max_length=100)
     total_price = models.CharField(max_length=100)
 
+<<<<<<< HEAD
 class guest_cart(models.Model):
     user_session=models.CharField(max_length=20)
     productid = models.ForeignKey(products,on_delete=models.CASCADE,null=True)
     quantity = models.CharField(max_length = 100)
     total_price = models.CharField(max_length = 100, null=True)
+=======
+>>>>>>> bd74c32f (dsdsds')
 
 class wishlist(models.Model):
     userid = models.ForeignKey(myusers, on_delete=models.CASCADE,null=True)
@@ -100,6 +103,12 @@ class Address(models.Model):
       city=models.CharField(max_length=50)
       state=models.CharField(max_length=30)
       country=models.CharField(max_length=50)
+
+class guest_cart(models.Model):
+     user_session=models.CharField(max_length=20)
+     productid = models.ForeignKey(products,on_delete=models.CASCADE,null=True)
+     quantity = models.CharField(max_length = 100)
+     total_price = models.CharField(max_length = 100, null=True)
 
 class Coupon(models.Model):
     coupon_number = models.CharField(max_length=16)

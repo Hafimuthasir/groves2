@@ -113,6 +113,7 @@ def login(request):
             usercheck = myusers.objects.get(username=username)
             if usercheck.status == False:
                  request.session['username'] = username
+<<<<<<< HEAD
                  if 'guest' in request.session:
                     guest = request.session['guest']
                     print(guest)
@@ -127,6 +128,8 @@ def login(request):
                         cartobj.save()
                     del request.session['guest']
                     gcart.delete()
+=======
+>>>>>>> bd74c32f (dsdsds')
                  return redirect('index')
             else:
                 messages.error(request, 'You are blocked')
@@ -586,9 +589,15 @@ def carbrandman(request):
     if request.method=="POST":
         carbr = request.POST.get('carbr')
         image = request.FILES.get('image')
+<<<<<<< HEAD
         exist = carbrands.objects.filter(carbrand=carbr)
         if exist:
             messages.error(request,"already exist!!")
+=======
+        exist= carbrands.objects.filter(carbrand=carbr)
+        if exist:
+            message.warning("already exist!!")
+>>>>>>> bd74c32f (dsdsds')
         else:
             add = carbrands()
             add.carbrand = carbr
@@ -1500,6 +1509,7 @@ def export_to_pdf(request):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
     return response
+<<<<<<< HEAD
 
 
 # guest cart
@@ -1572,3 +1582,5 @@ def gcart_remove(request,id):
     gcart = guest_cart.objects.get(id=id)
     gcart.delete()
     return redirect(gcart_view)
+=======
+>>>>>>> bd74c32f (dsdsds')

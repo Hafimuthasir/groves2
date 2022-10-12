@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-import sweetify
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CSRF_TRUSTED_ORIGINS = ["https://www.grovesautoparts.ga","https://grovesautoparts.ga"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-*s63937d+z8rrcd5jk$ech56addai)_)#jn%tm#$73@6ui%!lx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -143,10 +143,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert'
-
-sweetify.DEFAULT_OPTS = {
-    'showConfirmButton': False,
-    'timer': 2500,
-    'allowOutsideClick': True,
-    'confirmButtonText': 'OK',
-}
