@@ -477,8 +477,12 @@
 {% endfor %}
 
       <script>
+        {% if logedin == 'False' %}
         var url = '{% url 'gcart_update' %}'
-        
+        {% else %}
+        var url = '{% url 'cart_update' %}'
+        {% endif %}
+
         $(document).ready(function(){
            
             $('.increment-btn').click(function(e){
