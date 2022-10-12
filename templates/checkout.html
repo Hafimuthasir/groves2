@@ -43,7 +43,9 @@
                           <form method = "POST" class="mt-4">
                             {%csrf_token%}
                             
+                           
                           <h4>Saved Addresses</h4><br>
+                           {% if address %}
                               {% for i in address %}  
                               <input type="radio" id="html" name="address" checked value="{{i.id}}">
                                  <label for="html">{{i.buyer_name}}</label><br>
@@ -54,8 +56,15 @@
                                  <label for="html">{{i.state}}</label><br>
                                  <label for="html">{{i.country}}</label><br><hr>  
                                  {% endfor %}
+                                
                                  <a href="{% url 'addaddress' %}">Change Address</a>
+                                 {% else %}
+                                <p class="text-danger"> You have no saved addresses</p><br>
+                                <a href="{% url 'addaddress' %}"class="btn btn-primary">Add Address</a>
+                                  {% endif %}
+                                 
                                 </div>
+                                
                              
                                 
                           {% comment %} <p class="mb-0">You have 4 items in your cart</p> {% endcomment %}
@@ -281,13 +290,22 @@
                             <option value ="razorpay">Razorpay</option>
                             </select>
                           </div>
-
+							{% if address %}
                            <button type="submit" value="checkbt" name="checkbt" class="btn btn-info btn-block btn-lg">
                             <div class="d-flex justify-content-between">
                               <span>₹{{total}}.00</span>
                               <span>Place Order <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                             </div>
-                          </button> 
+                          </button>
+                          {% else %}
+                          <a href="{% url 'addaddress' %}" type="submit" value="checkbt" name="checkbt" class="btn btn-danger btn-block btn-lg">
+                                                      <div class="d-flex justify-content-between">
+                                                        <span>₹{{total}}.00</span>
+                                                        <span>Add address to Place Order <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                                      </div>
+                                                    </a>
+                           
+                          {% endif %}
 
                         </form>
 

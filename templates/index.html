@@ -61,7 +61,7 @@
                 </div>
                   
                 <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-                  <a href="product.html" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                  <a href="#" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                     Shop Now
                   </a>
                 </div>
@@ -241,9 +241,9 @@
     
                 <div class="block2-txt flex-w flex-t p-t-14">
                   <div class="block2-txt-child1 flex-col-l ">
-                    <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                    <p class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                       {{i.products.productname}}
-                    </a>
+                    </p>
                     {% if i.products.total_disprice is None %}
                     <span class="stext-105 cl3">
                       Rs.{{i.products.price}}
@@ -503,9 +503,9 @@
 
 						<div class="block2-txt flex-w flex-t p-t-14">
 							<div class="block2-txt-child1 flex-col-l ">
-								<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<p class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 									{{i.productname}}
-								</a>
+								</p>
                 {% if i.total_disprice is None %}
 								<span class="stext-105 cl3">
 									Rs.{{i.price}}
@@ -602,8 +602,8 @@
                         <img src={{i.image}} style="height:200px; width:220px;" alt=""></a>
                     </div>
                     
-                    <h5><a href="" style="color:grey;">{{i.carbrand}}</a></h5>
-                    <h5><a href="">{{i.productname}}</a></h5>
+                    <h5>{{i.carbrand}}</h5>
+                    <h5>{{i.productname}}</h5>
                     <div class="product-carousel-price">
                         <a>Rs.{{i.price}}.00</a> <del>Rs.3500.00</del>
                     </div>  

@@ -53,6 +53,7 @@ urlpatterns = [
     path('clear_pro_offer/<int:id>', views.clear_pro_offer, name='clear_pro_offer'),
     path('sort/<int:id>', views.sort,name='sort'),
     path('filter/<int:id>', views.filter,name='filter'),
+    path('filter/detail/<int:id>', views.prodetail,name='prodetail'),
     path('filterbycar/<str:id>', views.filterbycar,name='filterbycar'),
     path('qplus/<int:id>', views.qplus,name='qplus'),
     path('qminus/<int:id>', views.qminus,name='qminus'),

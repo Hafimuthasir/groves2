@@ -20,8 +20,8 @@
         <div class="form">
           <form class="login-form" method="POST">
             {%csrf_token%}
-            <img src="{% static './images/banner3.jpg' %}" height="100px" width="100px"><br>
-            <br>
+            <p style="color:white;">Enter Your Phone number</p>
+            
             {% comment %} <input type="text" placeholder="username" name="username"/> {% endcomment %}
             <input type="text" placeholder="phone number" name="phonenumber"/>
             <button>login</button>
