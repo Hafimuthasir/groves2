@@ -39,7 +39,7 @@ import ast
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
-  
+    print("hai")
     product = carbrands.objects.all()
     allcates=categories.objects.all()
     if 'search-product' in request.POST:
