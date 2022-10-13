@@ -84,6 +84,12 @@ class cart(models.Model):
 
 
 
+class guest_cart2(models.Model):
+    user_session=models.CharField(max_length=20)
+    productid = models.ForeignKey(products,on_delete=models.CASCADE,null=True)
+    quantity = models.CharField(max_length = 100)
+    total_price = models.CharField(max_length = 100, null=True)
+
 class wishlist(models.Model):
     userid = models.ForeignKey(myusers, on_delete=models.CASCADE,null=True)
     productid = models.ForeignKey(products, on_delete=models.CASCADE,null=True)
