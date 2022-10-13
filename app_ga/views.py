@@ -612,9 +612,7 @@ def cartlist(request):
             else:
                 a = a+int(i.productid.price)*int(i.quantity)
     else:
-        guser = request.session.get('guest')
-        cartitems = guest_cart.objects.filter()
-        return render(request,'csrtlist2.html',{'cart':cartitems,'price':a,'logedin':False})
+        return redirect(gcart_view)
     return render(request,'cartlist2.html',{'cart':cartitems,'price':a,'logedin':logedin})
 
 def wishlistt(request):
@@ -956,6 +954,7 @@ def cart_update(request):
    print('cart')
    body = json.loads(request.body)
    cartv = cart.objects.get(id=body['cart_id'])
+   print("sda",cartv)
    
    cartv.quantity = body['product_qty']
    cartv.total_price = body['total']
@@ -1548,14 +1547,14 @@ def gcart_view(request):
             return redirect(cartlist)
     return render(request,'cartlist2.html',{'cart':cart,'price':a,'logedin':logedin})
 
-def gcart_update(request):
-   body = json.loads(request.body)
-   cart = guest_cart2.objects.get(id=body['cart_id'])
-   cart.quantity = body['product_qty']
-   cart.save()
-   print("cart_test",body)
-   print("update cart")
-   return redirect(gcart_view)
+# def gcart_update(request):
+#    body = json.loads(request.body)
+#    cart = guest_cart2.objects.get(id=body['cart_id'])
+#    cart.quantity = body['product_qty']
+#    cart.save()
+#    print("cart_test",body)
+#    print("update cart")
+#    return redirect(gcart_view)
 
 def gcart_update(request):
    print('cart')
