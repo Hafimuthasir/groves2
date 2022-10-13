@@ -39,7 +39,7 @@ import ast
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
-    
+  
     product = carbrands.objects.all()
     allcates=categories.objects.all()
     if 'search-product' in request.POST:
@@ -85,9 +85,6 @@ def index(request):
         recent = recent_products.objects.filter(user = userid).order_by('products','-id').distinct('products')[:4][::-1]
         for i in recent:
             print("'yyy",i.id)
-    elif 'otp' in request.session:
-        logedin = True
-        print("otplogged")
         
     else :
         logedin = False
