@@ -31,6 +31,9 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 import xlwt
 from django.db.models import Sum
+import ast
+
+
 # Create your views here.
 
 
@@ -84,6 +87,7 @@ def index(request):
             print("'yyy",i.id)
     elif 'otp' in request.session:
         logedin = True
+        print("otplogged")
         
     else :
         logedin = False
@@ -138,72 +142,195 @@ def login(request):
             return redirect(login) 
     return render(request,'login.html')
 
-def otpfunc(request):
-    otp = random.randint(1000,9999)
-    account_sid = "ACf09abc09102db9662b14701508d05275"
-    auth_tocken = "a8ec68c50e6a068f7d47bcc038979ba3"
-    client = Client(account_sid,auth_tocken)
-    
-    # phone_number= "7994805975"
-    
-    # verification = client.verify \
-    #                  .services(settings.SERVICE_ID) \
-    #                  .verifications \
-    #                  .create(to= f"{settings.COUNTRY_CODE}{phone_number}", channel='sms')
-    # print(verification.status)
-    msg = client.messages.create(
-        body = f"Your OTP is {otp}",
-        from_ = "+12183575790",
-        to = "+917994805975"
-    )
-    print("otp = ",otp)
-    request.session['otp'] = otp
-    return redirect(otpverify)
-
 
 def otplogin(request):
-    if 'username' in request.session:
-        return redirect(index)
-    if request.method=='POST':
-        phonenumber = request.POST.get('phonenumber')
+    if request.method == 'POST':
+        phone = request.POST.get('phonenumber')
+        request.session['phone'] = phone
 
-        user = myusers.objects.filter(phonenumber=phonenumber).exists()
-        
-        if user :
-            usercheck = myusers.objects.get(phonenumber=phonenumber)
-            if usercheck.status == False:
-                return redirect(otpfunc)
-            #   request.session['username'] = username
-            #   messages.success(request,"You have logged in successfully")
-            #   return redirect('index')
-            else:
-                messages.error(request, 'You are blocked')
+        if myusers.objects.filter(phonenumber=phone).exists():
+            # totp= pyotp.TOTP('base32secret3232').now()
+            request.session['phone_no'] = phone
 
+            client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+            verification = client.verify \
+                .services(settings.SERVICE_ID) \
+                .verifications \
+                .create(to='+91'+phone, channel='sms')
+            
+
+            return redirect('otpverify')
         else:
-            messages.error(request, '*Invalid Username or Phone number')
-            return redirect(login) 
-    return render(request,'otplogin.html')
+
+            messages.info(request, "invalid number")
+            return render(request, 'otplogin.html')
+    else:
+        return render(request, 'otplogin.html')
 
 def otpverify(request):
     if request.method == 'POST':
         otp = request.POST.get('otp')
-        a=request.session.get('otp')
-        print("otp = ",otp,a)
-        print(type(otp),type(a))
-        if otp == "":
-             return render(otpverify)
-        if int(otp) == a:
-            request.session['otp'] = otp
-            messages.success(request,"You have logged in successfully")
-            
-            return redirect(index)
-        else:
-            messages.warning(request,"Invalid OTP")
-            return redirect(otpverify)
-            
-    return render(request,'otpverify.html')
-    
+        print(otp)
+        phone_no = request.session['phone_no']
+        print(phone_no)
+        if myusers.objects.filter(phonenumber=phone_no).exists():
+            user = myusers.objects.get(phonenumber=phone_no)
 
+            client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+            verification_check = client.verify \
+                .services(settings.SERVICE_ID) \
+                .verification_checks \
+                .create(to='+91'+phone_no, code=otp)
+            if verification_check.status == "approved":
+                user = myusers.objects.get(phonenumber = phone_no)
+                request.session['username'] = user.username
+                print("session created")
+                return redirect('/')
+            else:
+                messages.info(request,'invalid OTP')
+                return render(request, 'otpverify.html')
+        else:
+            messages.info(request, 'invalid phone number')
+            return render(request, 'otpverify.html')
+    else:
+        return render(request, 'otpverify.html')
+
+
+
+# def otpfunc(request):
+#     otp = random.randint(1000,9999)
+#     account_sid = "   "
+#     auth_tocken = "77e3c05ac583c7e399bf11bcb092cb56"
+#     client = Client(account_sid,auth_tocken)
+    
+   
+#     msg = client.messages.create(
+#         body = f"Your OTP is {otp}",
+#         from_ = "+12183575790",
+#         to = "+917994805975"
+#     )
+#     print("otp = ",otp)
+#     request.session['otp'] = otp
+#     return redirect(otpverify)
+
+
+# def otplogin(request):
+#     if 'username' in request.session:
+#         return redirect(index)
+#     if request.method=='POST':
+#         phonenumber = request.POST.get('phonenumber')
+
+#         user = myusers.objects.filter(phonenumber=phonenumber).exists()
+        
+#         if user :
+#             usercheck = myusers.objects.get(phonenumber=phonenumber)
+#             if usercheck.status == False:
+#                 return redirect(otpfunc)
+            
+#             else:
+#                 messages.error(request, 'You are blocked')
+
+#         else:
+#             messages.error(request, '*Invalid Username or Phone number')
+#             return redirect(login)
+#     return render(request,'otplogin.html')
+
+# def otpverify(request):
+#     if request.method == 'POST':
+#         otp = request.POST.get('otp')
+#         a=request.session.get('otp')
+#         print("otp = ",otp,a)
+#         print(type(otp),type(a))
+#         if otp == "":
+#              return render(otpverify)
+#         if int(otp) == a:
+#             request.session['otp'] = otp
+#             messages.success(request,"You have logged in successfully")
+            
+#             return redirect(index)
+#         else:
+#             messages.warning(request,"Invalid OTP")
+#             return redirect(otpverify)
+            
+#     return render(request,'otpverify.html')
+
+def regotpverify(request,context):
+    print("jjj",context)
+    print("qq",type(context))
+#  print("pp",context["firstname"])
+    result = ast.literal_eval(context)
+    print(type(result))
+    firstname = result["firstname"]
+    lastname = result["lastname"]
+    username = result["username"]
+    email = result["email"]
+    password =result["password"]
+    phonenumber = result["phonenumber"]
+    refferal=result["refferal"]
+
+         
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        print(otp)
+        phone_no = request.session['phone_no']
+        print(phone_no)
+        
+
+
+        client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+        verification_check = client.verify \
+        .services(settings.SERVICE_ID) \
+        .verification_checks \
+        .create(to='+91'+phone_no, code=otp)
+
+        if verification_check.status == "approved":
+        
+            random_code = get_random_string(7, allowed_chars=string.ascii_uppercase + string.digits)
+            print("fsfsf",random_code)
+            
+            if refferal:
+                use = myusers.objects.filter(refferal_code=refferal).exists
+                if use:
+                    se_user = myusers.objects.filter(refferal_code=refferal)
+                    if se_user:
+                                    
+                        ref_user = myusers.objects.get(refferal_code=refferal)
+                        addbal = wallet.objects.get(user = ref_user.id)
+                        user = myusers.objects.create(
+                        firstname=firstname, lastname=lastname, username=username, email=email,
+                        password=password,refferal_code=random_code,phonenumber=phonenumber,status=False)
+                        user.save()
+                        addbal.balance = addbal.balance+120
+                        addbal.save()
+                        addwallet=myusers.objects.get(username=username)
+                        print("fffffffffff",addwallet.id)
+                        createwall=wallet.objects.create(user=addwallet,
+                            balance=40
+                        )
+                        createwall.save()
+                    else:
+                        print("invalid refferal code")
+                                
+
+            else:
+                user = myusers.objects.create(
+                    firstname=firstname, lastname=lastname, username=username, email=email,
+                        password=password,refferal_code=random_code,phonenumber=phonenumber, status=False)
+                user.save()
+
+                addwallet=myusers.objects.get(username=username)
+                createwall=wallet.objects.create(user=addwallet,
+                            balance=0
+                        )
+                createwall.save()
+                messages.success(request,'Account has been created successfully')
+                return redirect(login)
+        else:
+            messages.info(request,'invalid OTP')
+            return render(request, 'otpverifyreg.html')
+    return render(request,'otpverifyreg.html')
+            
+        
 def register(request):
     if request.method == 'POST':
         firstname=request.POST.get('firstname')
@@ -224,45 +351,35 @@ def register(request):
             elif myusers.objects.filter(email=email).exists():
                 messages.info(request,"Email is already taken")
                 return redirect(register)
+            elif myusers.objects.filter(phonenumber=phonenumber).exists():
+                messages.info(request,"Phone number is already taken")
+                return redirect(register)
             else:
-                random_code = get_random_string(7, allowed_chars=string.ascii_uppercase + string.digits)
-                print("fsfsf",random_code)
-                if refferal:
-                    use = myusers.objects.filter(refferal_code=refferal).exists
-                    if use:
-                        se_user = myusers.objects.filter(refferal_code=refferal)
-                        if se_user:
-                            ref_user = myusers.objects.get(refferal_code=refferal)
-                            addbal = wallet.objects.get(user = ref_user.id)
-                            user = myusers.objects.create(
-                            firstname=firstname, lastname=lastname, username=username, email=email,
-                            password=password,refferal_code=random_code,phonenumber=phonenumber,status=False)
-                            user.save()
-                            addbal.balance = addbal.balance+120
-                            addbal.save()
-                            addwallet=myusers.objects.get(username=username)
-                            print("fffffffffff",addwallet.id)
-                            createwall=wallet.objects.create(user=addwallet,
-                                balance=40
-                            )
-                            createwall.save()
-                    else:
-                        print("invalid refferal code")
-                        
+                
+                request.session['phone_no'] = phonenumber
+                
+                    
 
-                else:
-                    user = myusers.objects.create(
-                        firstname=firstname, lastname=lastname, username=username, email=email,
-                            password=password,refferal_code=random_code,phonenumber=phonenumber, status=False)
-                    user.save()
+                client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+                verification = client.verify \
+                .services(settings.SERVICE_ID) \
+                .verifications \
+                .create(to='+91'+phonenumber, channel='sms')
+                context = {
+                    "firstname":firstname,
+                    "lastname":lastname,
+                    "username":username,
+                    "email":email,
+                    "phonenumber":phonenumber,
+                    "password":password,
+                    "refferal":refferal 
+                }
+                return redirect(regotpverify,context)
 
-                    addwallet=myusers.objects.get(username=username)
-                    createwall=wallet.objects.create(user=addwallet,
-                                balance=0
-                            )
-                    createwall.save()
-                messages.success(request,'Account has been created successfully')
-                return redirect(login)
+
+
+
+                                
         else:
             messages.warning(request, 'Password not matching...!!')
             return redirect(register)

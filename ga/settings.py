@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -135,10 +135,10 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_TOKEN = "a8ec68c50e6a068f7d47bcc038979ba3"
-# ACCOUNT_SID = "ACf09abc09102db9662b14701508d05275"
-# SERVICE_ID = "MG7582e7cb07baa29209fce5762c1a8549"
-# COUNTRY_CODE = "+91"
+AUTH_TOKEN = config("AUTH_TOKEN")
+ACCOUNT_SID = config("ACCOUNT_SID")
+SERVICE_ID = config("SERVICE_ID")
+COUNTRY_CODE = "+91"
 
 
 
