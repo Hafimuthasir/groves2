@@ -66,6 +66,7 @@ urlpatterns = [
     path('addoffer/<int:id>', views.addoffer,name='addoffer'),
     path('addoffers', views.addoffers,name='addoffers'),
     path('block/<int:id>', views.block,name='block'),
+    
 
     path('add_cart_guest/<int:pid>',views.add_cart_guest, name='add_cart_guest'),
     path('gcart_remove/<int:id>',views.gcart_remove, name='gcart_remove'),
