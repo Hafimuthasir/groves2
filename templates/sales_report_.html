@@ -8,8 +8,8 @@ Sales Report
   <div class='row d-flex'>
     <div class='d-flex justify-content-end'>
 
-      <a href="{% url 'export_to_pdf' %}" class='btn mb-3 me-2 btn-outline-primary'>Export to PDF</a>
-      <a href="{% url 'export_to_excel' %}" class='btn mb-3 btn-outline-success'>Export to XLS</a>
+      <a href="{% url 'export_to_pdf' %}" style="height:35px;" class='btn mb-3 btn-primary'>Export to PDF</a>
+      &nbsp;<a href="{% url 'export_to_excel' %}" style="height:35px;" class='btn mb-3 btn-success'>Export to XLS</a>
     </div>  
    
    <div class='col'>
@@ -79,12 +79,43 @@ Sales Report
   </tbody>
 </table>
 
+<nav aria-label="Page navigation example" >
+  <ul class="pagination pagination-lg justify-content-center" style="height:20px;">
+    
+ 
+
+{% if datas.has_previous %}
+  <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+
+  <li class="page-item"><a class="page-link" href="?page={{ datas.previous_page_number }}">Previous</a></li>
+  
+{% endif %}
+
+
+{% comment %} <li class="page-item disabled"><a href="#" class="page-link">Page {{ datas.number }} of {{ datas.paginator.num_pages }}</a></li> {% endcomment %}
+
+
+{% for i in nums %}
+  <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+
+{% endfor %}
+
+
+{% if datas.has_next %}
+  <li class="page-item"><a class="page-link" href="?page={{ datas.next_page_number }}">Next</a></li>
+
+  <li class="page-item"><a class="page-link" href="?page={{ datas.paginator.num_pages }}">Last &raquo</a></li>
+
+{% endif %}
+
+ </ul>
+</nav>
 
 </div>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
   {% for i in messages %}
-  swal('Perfect',"{{i}}","warning");
+  swal('',"{{i}}","warning");
 {% endfor %}
 </script>
 

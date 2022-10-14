@@ -107,7 +107,11 @@
                                 <h5 class="fw-normal mb-0"></a>&nbspQty.{{i.quantity}}&nbsp</h5>
                               </div>
                               <div style="width: 80px;">
+                                {% if i.productid.total_disprice%}
                                 <h5 class="mb-0">&nbsp&nbspRs.{{i.productid.total_disprice}}</h5>
+                                {% else %}
+                                <h5 class="mb-0">&nbsp&nbspRs.{{i.productid.price}}</h5>
+                                {% endif %}
                               </div>
                               <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                             </div>

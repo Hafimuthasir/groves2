@@ -449,10 +449,10 @@ def addproduct(request):
         probj.retrn_policy = request.POST.get('retrn_policy')
         category = request.POST.get('category')
         print(probj.category)
-        cateoptions = categories.objects.get(id=probj.category)
+        cateoptions = categories.objects.get(id=category)
         probj.catid = cateoptions
         selecat=cateoptions.categoryname
-        probj.categoryname=selecat
+        probj.category=selecat
         # carbrobj = carbrands.objects.get(id=probj.catid)
         
         probj.carbrand = request.POST.get('carbrand')
@@ -1333,39 +1333,43 @@ def addoffer(request,id):
     if request.method=='POST':
         disprice = request.POST.get('disprice')
         disperc = request.POST.get('disperc')
-        if disperc:
-                a=int(add.price)*int(disperc)/100
-                print("perc sele",disperc)
-        elif disprice:
-                a=disprice
-                print("price sele",disprice)
-        else:
-                a=0
+        if int(disperc)<=75:
 
-        add.dis_proprice = int(add.price) - int(a)
-        add.dis_applied = True
-        add.save()
-        exist = add.dis_price
-        # existcheck = add.dis_applied
-        # if exist :
-        
-        diis=int(add.price) - int(a)
-        print('exist',exist)
-        print('totdis',add.total_disprice)
-        print("www",a)
-        print("www",diis)
-        
-        if exist:
-            if int(exist) >= diis:
-                add.total_disprice = diis
-                add.save()
-            elif int(exist) <= diis :
-                print("www",a)
-                add.total_disprice = exist
+            if disperc:
+                    a=int(add.price)*int(disperc)/100
+                    print("perc sele",disperc)
+            elif disprice:
+                    a=disprice
+                    print("price sele",disprice)
+            else:
+                    a=0
+
+            add.dis_proprice = int(add.price) - int(a)
+            add.dis_applied = True
+            add.save()
+            exist = add.dis_price
+            # existcheck = add.dis_applied
+            # if exist :
+            
+            diis=int(add.price) - int(a)
+            print('exist',exist)
+            print('totdis',add.total_disprice)
+            print("www",a)
+            print("www",diis)
+            
+            if exist:
+                if int(exist) >= diis:
+                    add.total_disprice = diis
+                    add.save()
+                elif int(exist) <= diis :
+                    print("www",a)
+                    add.total_disprice = exist
+                    add.save()
+            else:
+                add.total_disprice=diis
                 add.save()
         else:
-            add.total_disprice=diis
-            add.save()
+            messages.warning(request,"percentage should be below 75%")
             
     return render (request,'addoffer.html',{'add':add})
 
@@ -1429,7 +1433,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
                 else:
                     for i in data:
@@ -1442,7 +1450,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
             else:
                 messages.warning(request,"Nothing Found!!")
@@ -1466,7 +1478,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
                 else:
                     for i in date_check:
@@ -1479,7 +1495,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
             else:
                 messages.warning(request,"Nothing Found!!")
@@ -1501,7 +1521,13 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
+                    
                     return render(request,'sales_report_.html',context)
                 else:
                     for i in data_range:
@@ -1514,7 +1540,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
             else:
                 messages.warning(request,"Nothing Found!!")
@@ -1531,7 +1561,11 @@ def sales_report_date(request):
                 sales.save()
             sales = SalesReport.objects.all()
             total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-            context = { 'sales':sales,'total':total['productPrice__sum']}
+            p = Paginator(sales, 10)
+            page = request.GET.get('page')
+            sales = p.get_page(page)
+            nums = "a" * sales.paginator.num_pages
+            context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
             return render(request,'sales_report_.html',context)
 
         else:
@@ -1545,6 +1579,11 @@ def sales_report_date(request):
                 sales.save()
             sales = SalesReport.objects.all()
             total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+
+            p = Paginator(sales, 10)
+            page = request.GET.get('page')
+            sales = p.get_page(page)
+            nums = "a" * sales.paginator.num_pages
             context = { 'sales':sales,'total':total['productPrice__sum']}
             return render(request,'sales_report_.html',context)
         
