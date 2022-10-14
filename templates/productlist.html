@@ -56,7 +56,9 @@
             <td>{{i.price}}</td>
             <!-- <td class="col-md-1" style="width:10px;">{{i.description}}</td> -->
             <td>{{i.carbrand}}</td>
+            {% if i.image %}
             <td><img src="{{i.image.url}}"></td>
+            {% endif %}
             <td>{{i.category}}</td>
             <td><a href="{% url 'editproduct' i.id %}"class="btn btn-primary">Edit</a></td>  
             {% comment %} <td><a href="{% url 'addoffer' i.id %}" class="btn btn-success">Offer Details</a></td> {% endcomment %}

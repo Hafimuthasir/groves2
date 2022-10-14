@@ -494,8 +494,9 @@
 					<div class="block2 shadow p-3 mb-5 bg-body rounded" style="height:23rem;">
             
 						<div class="block2-pic hov-img0 ">
+						{% if i.image %}
 						<a href="detail/{{i.id}}">	<img src="{{i.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT"></a>
-
+						{% endif %}
 							{% comment %} <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
 								Quick View
 							</a> {% endcomment %}

@@ -105,11 +105,6 @@ class Address(models.Model):
       state=models.CharField(max_length=30)
       country=models.CharField(max_length=50)
 
-class guest_cart(models.Model):
-    user_session=models.CharField(max_length=20)
-    productid = models.ForeignKey(products,on_delete=models.CASCADE,null=True)
-    quantity = models.CharField(max_length = 100)
-    total_price = models.CharField(max_length = 100, null=True)
     
 class guest_cart2(models.Model):
     user_session=models.CharField(max_length=20)

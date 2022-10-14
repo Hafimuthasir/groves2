@@ -447,12 +447,12 @@ def addproduct(request):
         else:
             probj.retrn = False
         probj.retrn_policy = request.POST.get('retrn_policy')
-        probj.category = request.POST.get('category')
+        category = request.POST.get('category')
         print(probj.category)
         cateoptions = categories.objects.get(id=probj.category)
         probj.catid = cateoptions
         selecat=cateoptions.categoryname
-        probj.category=selecat
+        probj.categoryname=selecat
         # carbrobj = carbrands.objects.get(id=probj.catid)
         
         probj.carbrand = request.POST.get('carbrand')
@@ -645,9 +645,11 @@ def editproduct(request,id):
         prod.productname = request.POST.get('productname')
         prod.price = request.POST.get('price')
         prod.description = request.POST.get('description')
-        prod.category = request.POST.get('category')
-        cateoptions=categories.objects.get(id=prod.category)
+        cat = request.POST.get('category')
+        cateoptions=categories.objects.get(id=cat)
         prod.catid=cateoptions
+        selecat=cateoptions.categoryname
+        prod.category=selecat
         prod.carbrand = request.POST.get('carbrand')
         rtrn = request.POST.get('retrn')
         if rtrn:
@@ -656,11 +658,11 @@ def editproduct(request,id):
             prod.retrn = False
         prod.retrn_policy = request.POST.get('retrn_policy')
         getimage = request.FILES.get('image')
-        existimage = prod.image
-        if getimage:
-            prod.image = getimage
-        else:
-            prod.image = existimage
+        prod.image=getimage
+        # if getimage:
+            # prod.image = getimage
+        # else:
+            # prod.image = existimage
         prod.save()
         # product = products.objects.create(productname=productname,price=price,
         # description=description,category=category,carbrand=carbrand)
