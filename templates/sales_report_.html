@@ -17,7 +17,7 @@ Sales Report
     <form name='myForm' method='post'>
       {% csrf_token %}
       <div class='d-flex'>
-        <input  class="form-control" type='date' name='date' required>
+        <input  class="form-control" type='date' id="date" name='date' required>
         <input type='submit' class='btn-primary ms-2' value='submit' onclick="">
       </div>
     </form>
@@ -27,7 +27,7 @@ Sales Report
     <form name='myForm1' method='post'>
       {% csrf_token %}
       <div class='d-flex'>
-        <input  class="form-control" type='month' name='month' required>
+        <input  class="form-control" type='month' id="month_date" name='month' required>
         <input type='submit' class='btn-primary ms-2' value='submit' onclick="">
       </div>
     
@@ -40,9 +40,9 @@ Sales Report
     <form name='myForm2' method='post'>
       {% csrf_token %}
       <div class='d-flex'>
-        <input  class="form-control me-2" type='date' name='date1' required>
-        <input  class="form-control" type='date' name='date2' required>
-        <input type='submit' class='btn-primary ms-2' value='submit' onclick="">
+        <input  class="form-control me-2" type='date' id="date2" name='date1' required>
+        <input  class="form-control" type='date' id="date3" name='date2' required>
+        <input type='submit' class='btn-primary ms-2' max="2022-10-14" value='submit' onclick="">
       </div>
     
     </form>
@@ -113,10 +113,35 @@ Sales Report
 
 </div>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+        crossorigin="anonymous"></script>
+
 <script>
   {% for i in messages %}
   swal('',"{{i}}","warning");
 {% endfor %}
+
+$(function () {
+  var dtToday = new Date();
+
+  var month = dtToday.getMonth() + 1;
+  var day = dtToday.getDate();
+  var year = dtToday.getFullYear();
+
+  if (month < 10)
+      month = '0' + month.toString();
+  if (day < 10)
+      day = '0' + day.toString();
+
+  var maxDate = year + '-' + month + '-' + day;
+  var maxMonth = year + '-' + month;
+  $('#date').attr('max', maxDate);
+  $('#date2').attr('max', maxDate);
+  $('#date3').attr('max', maxDate);
+  $('#month_date').attr('max', maxMonth);
+});
+
 </script>
 
 {% endblock %}

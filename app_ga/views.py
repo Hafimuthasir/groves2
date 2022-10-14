@@ -530,7 +530,7 @@ def editcategory(request,id):
 def deletecarbr(request,id):
     cate = carbrands.objects.get(id=id)
     cate.delete()
-    return redirect(addcategory)
+    return redirect(carbrandman)
 
 def editcarbr(request,id):
     cate = carbrands.objects.get(id=id) 
@@ -712,7 +712,7 @@ def carbrandman(request):
 
         exist= carbrands.objects.filter(carbrand=carbr)
         if exist:
-            message.warning("already exist!!")
+            messages.warning("already exist!!")
 
         else:
             add = carbrands()
