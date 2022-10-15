@@ -75,6 +75,11 @@ def index(request):
             print("llll",perc)
             i.disperc = perc
             i.save()
+
+        if int(i.stocks) < 10 :
+             i.stock_status = False
+             i.save()
+
             # prod = products.objects.all()
     
     

@@ -12,7 +12,7 @@ def counter(request):
         cart_count = len(Cart)
         
     else :
-        wish = None
+        wish = 0
         gcart = guest_cart2.objects.all()
         cart_count = len(gcart)
     return dict(cart_count=cart_count,wish=wish)
