@@ -656,14 +656,34 @@ def editproduct(request,id):
         selecat=cateoptions.categoryname
         prod.category=selecat
         prod.carbrand = request.POST.get('carbrand')
+        caropts = carbrands.objects.get(id=prod.carbrand)
+        prod.carbrid = caropts
+        selecarbr=caropts.carbrand
+        prod.carbrand=selecarbr
+
+        prdbr = request.POST.get('productbrand')
+        print("this is it",prdbr)
+        
+        prdbrand= prodbrands.objects.get(productbrand = prdbr)
+        prod.prodbrand = prdbrand.productbrand
+        # probj.prodbrand = 1
+        # sel=1
+        # brandopts = prodbrands.objects.get(brobj.productbrand=probj.prodbrand)
+        
+        # brandopts=prodbrands.objects.get(productbrand=)
+        prod.prodid = prdbrand
+
         rtrn = request.POST.get('retrn')
         if rtrn:
             prod.retrn = True
         else:
             prod.retrn = False
+
         prod.retrn_policy = request.POST.get('retrn_policy')
-        getimage = request.FILES.get('image')
-        prod.image=getimage
+        prod.image = None
+        prod.save()
+        prod.image = request.FILES.get('image')
+        
         # if getimage:
             # prod.image = getimage
         # else:

@@ -232,7 +232,13 @@
               <div class="block2 shadow p-3 mb-5 bg-body rounded" style="height:23rem;">
                 
                 <div class="block2-pic hov-img0 ">
-                <a href="detail/{{i.products.id}}">	<img src="{{i.products.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT"></a>
+                <a href="detail/{{i.products.id}}">	
+                  {% if i.image %}
+                  <img src="{{i.products.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT">
+                  {% else %}
+                  <p>image not available</p>
+                  {% endif %}
+                </a>
     
                   {% comment %} <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                     Quick View

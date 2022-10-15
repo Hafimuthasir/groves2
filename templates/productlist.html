@@ -58,6 +58,8 @@
             <td>{{i.carbrand}}</td>
             {% if i.image %}
             <td><img src="{{i.image.url}}"></td>
+            {% else %}
+            <td>image not available</td>
             {% endif %}
             <td>{{i.category}}</td>
             <td><a href="{% url 'editproduct' i.id %}"class="btn btn-primary">Edit</a></td>  
