@@ -113,8 +113,9 @@
                         <div class="col-sm-9">
 
                           Return Available ? : <input id="OtherCheckBox" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
-                          <input id="OtherTextBox" class="form-control" name="retrn_policy" type="text" placeholder="Enter the Return Period" style="display:none" />
-                      
+                          <div id="OtherTextBox" style="display:none">
+                            <label class="text-muted">Return-policy is 7 days</label>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group row">

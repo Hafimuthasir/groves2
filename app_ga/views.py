@@ -491,6 +491,7 @@ def addproduct(request):
     return render(request,'addproduct.html',{'datas':catedata,'brand':branddata,
     'carbr':carbrdata}  )
 
+
 # def viewproducts(request):
     # productlist = products.objects.all().order_by('id')
     # return render(request,'index.html', {'datas': productlist})
@@ -656,39 +657,24 @@ def editproduct(request,id):
         selecat=cateoptions.categoryname
         prod.category=selecat
         prod.carbrand = request.POST.get('carbrand')
-        caropts = carbrands.objects.get(id=prod.carbrand)
-        prod.carbrid = caropts
-        selecarbr=caropts.carbrand
-        prod.carbrand=selecarbr
-
-        prdbr = request.POST.get('productbrand')
-        print("this is it",prdbr)
-        
-        prdbrand= prodbrands.objects.get(productbrand = prdbr)
-        prod.prodbrand = prdbrand.productbrand
-        # probj.prodbrand = 1
-        # sel=1
-        # brandopts = prodbrands.objects.get(brobj.productbrand=probj.prodbrand)
-        
-        # brandopts=prodbrands.objects.get(productbrand=)
-        prod.prodid = prdbrand
-
+        prod.stocks = request.POST.get('stock')
         rtrn = request.POST.get('retrn')
         if rtrn:
             prod.retrn = True
         else:
             prod.retrn = False
-
-        prod.retrn_policy = request.POST.get('retrn_policy')
-        prod.image = None
-        prod.save()
+        prod.retrn_policy = 7
         prod.image = request.FILES.get('image')
-        
+        # prod.image2 = request.FILES.get('image2')
+        # prod.image3 = request.FILES.get('image3')
+        # prod.image4 = request.FILES.get('image4')
         # if getimage:
             # prod.image = getimage
         # else:
             # prod.image = existimage
         prod.save()
+        messages.info(request,"The product details has changed Successfully")
+        return redirect(productlist)
         # product = products.objects.create(productname=productname,price=price,
         # description=description,category=category,carbrand=carbrand)
         # product.save()
