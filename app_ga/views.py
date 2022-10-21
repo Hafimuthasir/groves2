@@ -964,7 +964,6 @@ def filter(request,id):
     print("YYYYAAAA",categ.categoryname)
     prod = products.objects.filter(category=categ.categoryname)
     
-
         # prod = products.objects.all()
     p = Paginator(prod, 4)
     page = request.GET.get('page')
@@ -1054,19 +1053,19 @@ def sort(request,id):
     if 'search-product' in request.POST:
             q=request.POST['search-product']
             searchwith=Q(Q(productname__icontains=q)|Q(prodbrand__icontains=q))
-            prod=products.objects.filter(searchwith,stock_status=True)
+            prod=products.objects.filter(searchwith)
             print('search function')
             
     else:
         if id == 1:
             print('normal function')
-            prod = products.objects.filter(stock_status=True).order_by('price')
+            prod = products.objects.all().order_by('price')
             for i in prod:
                 print("all prod",i.price )
         elif id == 2:
-            prod = products.objects.filter(stock_status=True).order_by('-price')
+            prod = products.objects.all().order_by('-price')
         else:
-            prod = products.objects.filter(stock_status=True).order_by('-created_at')
+            prod = products.objects.all().order_by('-created_at')
 
     
         # prod = products.objects.all()
