@@ -36,7 +36,7 @@
                   <div class="row">
                     
 
-                    <div class="col-2 bg-dark rounded text-white ">
+                    <div class="col-2 bg-dark rounded text-white overflow-auto" style="height:32rem;">
                       {% comment %} <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                       <hr> {% endcomment %}
@@ -78,7 +78,7 @@
                         </div> {% endcomment %}
                       </div>
                       
-                    <div class="col-6 overflow-auto border rounded" style="height:32rem;">
+                    <div class="col-6 overflow-auto border rounded shadow-sm p-3 mb-5 bg-white rounded" style="height:32rem;padding-left:10px;">
                       
                       {% comment %} <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
@@ -123,8 +123,16 @@
                         </div>
                       
                       </div>
+                      
                     
                       {% endfor %}
+                      {% if cart_count <= 2 %}
+                      <br><br><br>
+                      <a href="{% url 'index' %}" class="text-muted" style="margin-left:40%;font-size:20px;text-decoration:none;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                      </svg>Add more</a>
+                      
+                      {% endif %}
                       <!-- <div class="card mb-3">
                         <div class="card-body">
                           <div class="d-flex justify-content-between">
