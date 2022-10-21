@@ -1192,6 +1192,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	} {% endcomment %}
 	
 	</script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  {% for i in messages %}
+
+  swal("{{i}}","press ok to proceed");
+  
+{% endfor %}
+
+</script>
+
 	{% load sweetify %}
     {% sweetify %}
 </body>

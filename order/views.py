@@ -8,6 +8,7 @@ from app_ga.views import login
 import datetime
 import json
 import io
+from django.contrib import messages
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.http import JsonResponse
@@ -91,7 +92,7 @@ def checkout(request):
                             minusvalue=coupobj.discount_price
                             coupstat = True
                             copu=coupon
-                            sweetify.success(request,'Coupon applied successfully')
+                            messages.success(request,'Coupon applied successfully')
                             print("copu===",copu)
                             print("jjjj",disprice)
                             request.session['acoupon'] = minusvalue
@@ -106,10 +107,10 @@ def checkout(request):
                             else:
                                 minusvalue = coupobj.discount_price
                         else:
-                            sweetify.error(request,'Minimum amount is Rs.'+str(coupobj.minimum_amount))
+                            messages.error(request,'Minimum amount is Rs.'+str(coupobj.minimum_amount))
                     else:
                         print("dcsdsasdsdsdsdsadsa")
-                        sweetify.error(request,'This Coupon has expired')
+                        messages.error(request,'This Coupon has expired')
                 else:
                     minusvalue = 0
                 # request.session['acoupon'] = minusvalue
@@ -133,7 +134,7 @@ def checkout(request):
                     wall.balance = int(wall.balance)-int(inputwall)
                     request.session['wallet'] = inputwall
                     request.session['awallet'] = a
-                    sweetify.success(request,'Successfully redeemed from wallet')
+                    messages.success(request,'Successfully redeemed from wallet')
                 else:
                     return render(request,'checkout.html',{'cart':cartitems,'total':a,'address':address,'coupstat':coupstat,'subtotal':subtotal,'disprice':disprice,'wallet':wall,'logedin':logedin})
                 print("hihi",coupstat)
