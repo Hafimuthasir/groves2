@@ -26,6 +26,8 @@
       
     </div> {% endcomment %}
     <section class="h-100 h-custom" >
+      <form method = "POST" class="mt-4">
+        {%csrf_token%}
         <div class="container-fluid py-5 h-100" >
           <div class="row d-flex justify-content-center align-items-center h-100" >
             {% comment %} <div class="col"> {% endcomment %}
@@ -43,10 +45,8 @@
       
                       <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                          <form method = "POST" class="mt-4">
-                            {%csrf_token%}
+                          
                             
-                           
                           <h4>Saved Addresses</h4><br>
                            {% if address %}
                               {% for i in address %}  
@@ -367,7 +367,7 @@
                             </select>
                           </div>
 							{% if address %}
-                           <button type="submit" value="checkbt" name="checkbt" class="btn btn-info btn-block btn-lg">
+                           <button type="submit" value="submit" name="checkbt" class="btn btn-info btn-block btn-lg">
                             <div class="d-flex justify-content-between">
                               <span>₹{{total}}.00</span>
                               <span>Place Order <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
