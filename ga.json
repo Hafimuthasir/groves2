@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
    apps:
       [{
         name: "ga",
@@ -11,4 +12,19 @@
         max_restarts: 5,
         interpreter : "python"
       }]
+=======
+	apps:
+	[{
+		name:"ga",
+		script:"manage.py",
+		args:["runserver",
+		"127.0.0.1:8000"],
+		exec_mode:"fork",
+		instances:"1",
+		wait_ready:true,
+		autorestart:false,
+		max_restarts:5,
+		iterpreter:"python"
+	}]
+>>>>>>> af77a2ba768278d1f0ffd0e495657d46fb5e908d
 }

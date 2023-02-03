@@ -14,13 +14,17 @@
 		<div class="column">
 			<div id="img-container" >
 				<div id="lens" style="width:200px;height:150px;border:0px" class="shadow p-3 mb-5 bg-white rounded"></div>
+				
 				<img id="featured" class="shadow p-3 mb-5 bg-white rounded" src="{{ datas.image.url }}" style="border:0px">
+				
 			</div>
 			<div id="slide-wrapper" class="shadow p-3 mb-5 bg-white rounded">
 				<img id="slideLeft" class="arrow" src="{% static 'images2/icons/arrow-left.png'%}">
                 <br>
 				<div id="slider" >
+					{% if i.image %}
 					<img class="thumbnail active" src="{{ datas.image.url }}">
+					{% endif %}
                     {% if datas.image2 %}
 					<img class="thumbnail" src="{{datas.image2.url}}">
                     {% endif %}
@@ -73,7 +77,9 @@
 			<input type="submit" name="cartbt" class="btn btn-primary" value="Add to Cart">
 			{% endif %}
 			{% endif %}
+			{% if logedin == True %}
 			<input type="submit" name="wishlist_button" class="btn btn-danger" value="Add to wishlist">
+			{% endif %}
             </form>
         </div>
         

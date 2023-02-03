@@ -31,12 +31,15 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 import xlwt
 from django.db.models import Sum
+import ast
+
+
 # Create your views here.
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
-    
+    print("hai")
     product = carbrands.objects.all()
     allcates=categories.objects.all()
     if 'search-product' in request.POST:
@@ -72,6 +75,11 @@ def index(request):
             print("llll",perc)
             i.disperc = perc
             i.save()
+
+        if int(i.stocks) < 10 :
+             i.stock_status = False
+             i.save()
+
             # prod = products.objects.all()
     
     
@@ -82,8 +90,6 @@ def index(request):
         recent = recent_products.objects.filter(user = userid).order_by('products','-id').distinct('products')[:4][::-1]
         for i in recent:
             print("'yyy",i.id)
-    elif 'otp' in request.session:
-        logedin = True
         
     else :
         logedin = False
@@ -113,12 +119,13 @@ def login(request):
             usercheck = myusers.objects.get(username=username)
             if usercheck.status == False:
                  request.session['username'] = username
+
                  if 'guest' in request.session:
                     guest = request.session['guest']
                     print(guest)
                     print('quest')
                     
-                    gcart = guest_cart.objects.filter(user_session=guest)
+                    gcart = guest_cart2.objects.filter(user_session=guest)
                     for i in gcart:
                         cartobj = cart()
                         cartobj.quantity = i.quantity
@@ -127,6 +134,8 @@ def login(request):
                         cartobj.save()
                     del request.session['guest']
                     gcart.delete()
+
+
                  return redirect('index')
             else:
                 messages.error(request, 'You are blocked')
@@ -135,72 +144,195 @@ def login(request):
             return redirect(login) 
     return render(request,'login.html')
 
-def otpfunc(request):
-    otp = random.randint(1000,9999)
-    account_sid = "ACf09abc09102db9662b14701508d05275"
-    auth_tocken = "a8ec68c50e6a068f7d47bcc038979ba3"
-    client = Client(account_sid,auth_tocken)
-    
-    # phone_number= "7994805975"
-    
-    # verification = client.verify \
-    #                  .services(settings.SERVICE_ID) \
-    #                  .verifications \
-    #                  .create(to= f"{settings.COUNTRY_CODE}{phone_number}", channel='sms')
-    # print(verification.status)
-    msg = client.messages.create(
-        body = f"Your OTP is {otp}",
-        from_ = "+12183575790",
-        to = "+917994805975"
-    )
-    print("otp = ",otp)
-    request.session['otp'] = otp
-    return redirect(otpverify)
-
 
 def otplogin(request):
-    if 'username' in request.session:
-        return redirect(index)
-    if request.method=='POST':
-        phonenumber = request.POST.get('phonenumber')
+    if request.method == 'POST':
+        phone = request.POST.get('phonenumber')
+        request.session['phone'] = phone
 
-        user = myusers.objects.filter(phonenumber=phonenumber).exists()
-        
-        if user :
-            usercheck = myusers.objects.get(phonenumber=phonenumber)
-            if usercheck.status == False:
-                return redirect(otpfunc)
-            #   request.session['username'] = username
-            #   messages.success(request,"You have logged in successfully")
-            #   return redirect('index')
-            else:
-                messages.error(request, 'You are blocked')
+        if myusers.objects.filter(phonenumber=phone).exists():
+            # totp= pyotp.TOTP('base32secret3232').now()
+            request.session['phone_no'] = phone
 
+            client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+            verification = client.verify \
+                .services(settings.SERVICE_ID) \
+                .verifications \
+                .create(to='+91'+phone, channel='sms')
+            
+
+            return redirect('otpverify')
         else:
-            messages.error(request, '*Invalid Username or Phone number')
-            return redirect(login) 
-    return render(request,'otplogin.html')
+
+            messages.info(request, "invalid number")
+            return render(request, 'otplogin.html')
+    else:
+        return render(request, 'otplogin.html')
 
 def otpverify(request):
     if request.method == 'POST':
         otp = request.POST.get('otp')
-        a=request.session.get('otp')
-        print("otp = ",otp,a)
-        print(type(otp),type(a))
-        if otp == "":
-             return render(otpverify)
-        if int(otp) == a:
-            request.session['otp'] = otp
-            messages.success(request,"You have logged in successfully")
-            
-            return redirect(index)
-        else:
-            messages.warning(request,"Invalid OTP")
-            return redirect(otpverify)
-            
-    return render(request,'otpverify.html')
-    
+        print(otp)
+        phone_no = request.session['phone_no']
+        print(phone_no)
+        if myusers.objects.filter(phonenumber=phone_no).exists():
+            user = myusers.objects.get(phonenumber=phone_no)
 
+            client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+            verification_check = client.verify \
+                .services(settings.SERVICE_ID) \
+                .verification_checks \
+                .create(to='+91'+phone_no, code=otp)
+            if verification_check.status == "approved":
+                user = myusers.objects.get(phonenumber = phone_no)
+                request.session['username'] = user.username
+                print("session created")
+                return redirect('/')
+            else:
+                messages.info(request,'invalid OTP')
+                return render(request, 'otpverify.html')
+        else:
+            messages.info(request, 'invalid phone number')
+            return render(request, 'otpverify.html')
+    else:
+        return render(request, 'otpverify.html')
+
+
+
+# def otpfunc(request):
+#     otp = random.randint(1000,9999)
+#     account_sid = "   "
+#     auth_tocken = "77e3c05ac583c7e399bf11bcb092cb56"
+#     client = Client(account_sid,auth_tocken)
+    
+   
+#     msg = client.messages.create(
+#         body = f"Your OTP is {otp}",
+#         from_ = "+12183575790",
+#         to = "+917994805975"
+#     )
+#     print("otp = ",otp)
+#     request.session['otp'] = otp
+#     return redirect(otpverify)
+
+
+# def otplogin(request):
+#     if 'username' in request.session:
+#         return redirect(index)
+#     if request.method=='POST':
+#         phonenumber = request.POST.get('phonenumber')
+
+#         user = myusers.objects.filter(phonenumber=phonenumber).exists()
+        
+#         if user :
+#             usercheck = myusers.objects.get(phonenumber=phonenumber)
+#             if usercheck.status == False:
+#                 return redirect(otpfunc)
+            
+#             else:
+#                 messages.error(request, 'You are blocked')
+
+#         else:
+#             messages.error(request, '*Invalid Username or Phone number')
+#             return redirect(login)
+#     return render(request,'otplogin.html')
+
+# def otpverify(request):
+#     if request.method == 'POST':
+#         otp = request.POST.get('otp')
+#         a=request.session.get('otp')
+#         print("otp = ",otp,a)
+#         print(type(otp),type(a))
+#         if otp == "":
+#              return render(otpverify)
+#         if int(otp) == a:
+#             request.session['otp'] = otp
+#             messages.success(request,"You have logged in successfully")
+            
+#             return redirect(index)
+#         else:
+#             messages.warning(request,"Invalid OTP")
+#             return redirect(otpverify)
+            
+#     return render(request,'otpverify.html')
+
+def regotpverify(request,context):
+    print("jjj",context)
+    print("qq",type(context))
+#  print("pp",context["firstname"])
+    result = ast.literal_eval(context)
+    print(type(result))
+    firstname = result["firstname"]
+    lastname = result["lastname"]
+    username = result["username"]
+    email = result["email"]
+    password =result["password"]
+    phonenumber = result["phonenumber"]
+    refferal=result["refferal"]
+
+         
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        print(otp)
+        phone_no = request.session['phone_no']
+        print(phone_no)
+        
+
+
+        client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+        verification_check = client.verify \
+        .services(settings.SERVICE_ID) \
+        .verification_checks \
+        .create(to='+91'+phone_no, code=otp)
+
+        if verification_check.status == "approved":
+        
+            random_code = get_random_string(7, allowed_chars=string.ascii_uppercase + string.digits)
+            print("fsfsf",random_code)
+            
+            if refferal:
+                use = myusers.objects.filter(refferal_code=refferal).exists
+                if use:
+                    se_user = myusers.objects.filter(refferal_code=refferal)
+                    if se_user:
+                                    
+                        ref_user = myusers.objects.get(refferal_code=refferal)
+                        addbal = wallet.objects.get(user = ref_user.id)
+                        user = myusers.objects.create(
+                        firstname=firstname, lastname=lastname, username=username, email=email,
+                        password=password,refferal_code=random_code,phonenumber=phonenumber,status=False)
+                        user.save()
+                        addbal.balance = addbal.balance+120
+                        addbal.save()
+                        addwallet=myusers.objects.get(username=username)
+                        print("fffffffffff",addwallet.id)
+                        createwall=wallet.objects.create(user=addwallet,
+                            balance=40
+                        )
+                        createwall.save()
+                    else:
+                        print("invalid refferal code")
+                                
+
+            else:
+                user = myusers.objects.create(
+                    firstname=firstname, lastname=lastname, username=username, email=email,
+                        password=password,refferal_code=random_code,phonenumber=phonenumber, status=False)
+                user.save()
+
+                addwallet=myusers.objects.get(username=username)
+                createwall=wallet.objects.create(user=addwallet,
+                            balance=0
+                        )
+                createwall.save()
+                messages.success(request,'Account has been created successfully')
+                return redirect(login)
+        else:
+            messages.info(request,'invalid OTP')
+            return render(request, 'otpverifyreg.html')
+    return render(request,'otpverifyreg.html')
+            
+        
 def register(request):
     if request.method == 'POST':
         firstname=request.POST.get('firstname')
@@ -221,44 +353,35 @@ def register(request):
             elif myusers.objects.filter(email=email).exists():
                 messages.info(request,"Email is already taken")
                 return redirect(register)
+            elif myusers.objects.filter(phonenumber=phonenumber).exists():
+                messages.info(request,"Phone number is already taken")
+                return redirect(register)
             else:
-                random_code = get_random_string(7, allowed_chars=string.ascii_uppercase + string.digits)
-                print("fsfsf",random_code)
-                if refferal:
-                    use = myusers.objects.filter(refferal_code=refferal).exists
-                    if use:
-                        se_user = myusers.objects.filter(refferal_code=refferal).exists
-                        if se_user:
-                            ref_user = myusers.objects.get(refferal_code=refferal)
-                            addbal = wallet.objects.get(user = ref_user.id)
-                            user = myusers.objects.create(
-                            firstname=firstname, lastname=lastname, username=username, email=email,
-                            password=password,refferal_code=random_code,phonenumber=phonenumber,status=False)
-                            user.save()
-                            addbal.balance = addbal.balance+120
-                            addbal.save()
-                            addwallet=myusers.objects.get(username=username)
-                            print("fffffffffff",addwallet.id)
-                            createwall=wallet.objects.create(user=addwallet,
-                                balance=40
-                            )
-                            createwall.save()
-                    else:
-                        print("invalid refferal code")
+                
+                request.session['phone_no'] = phonenumber
+                
+                    
 
-                else:
-                    user = myusers.objects.create(
-                        firstname=firstname, lastname=lastname, username=username, email=email,
-                            password=password,refferal_code=random_code,phonenumber=phonenumber, status=False)
-                    user.save()
+                client = Client(settings.ACCOUNT_SID, settings.AUTH_TOKEN)
+                verification = client.verify \
+                .services(settings.SERVICE_ID) \
+                .verifications \
+                .create(to='+91'+phonenumber, channel='sms')
+                context = {
+                    "firstname":firstname,
+                    "lastname":lastname,
+                    "username":username,
+                    "email":email,
+                    "phonenumber":phonenumber,
+                    "password":password,
+                    "refferal":refferal 
+                }
+                return redirect(regotpverify,context)
 
-                    addwallet=myusers.objects.get(username=username)
-                    createwall=wallet.objects.create(user=addwallet,
-                                balance=0
-                            )
-                    createwall.save()
-                messages.success(request,'Account has been created successfully')
-                return redirect(login)
+
+
+
+                                
         else:
             messages.warning(request, 'Password not matching...!!')
             return redirect(register)
@@ -329,9 +452,9 @@ def addproduct(request):
         else:
             probj.retrn = False
         probj.retrn_policy = request.POST.get('retrn_policy')
-        probj.category = request.POST.get('category')
+        category = request.POST.get('category')
         print(probj.category)
-        cateoptions = categories.objects.get(id=probj.category)
+        cateoptions = categories.objects.get(id=category)
         probj.catid = cateoptions
         selecat=cateoptions.categoryname
         probj.category=selecat
@@ -367,6 +490,7 @@ def addproduct(request):
         # product.save()
     return render(request,'addproduct.html',{'datas':catedata,'brand':branddata,
     'carbr':carbrdata}  )
+
 
 # def viewproducts(request):
     # productlist = products.objects.all().order_by('id')
@@ -412,7 +536,7 @@ def editcategory(request,id):
 def deletecarbr(request,id):
     cate = carbrands.objects.get(id=id)
     cate.delete()
-    return redirect(addcategory)
+    return redirect(carbrandman)
 
 def editcarbr(request,id):
     cate = carbrands.objects.get(id=id) 
@@ -506,7 +630,7 @@ def prodetail(request,id):
                     addwish.save()
     if logedin == False:
         guest = request.session.get('guest')
-        gexist = guest_cart.objects.filter(user_session = guest,productid=product).exists()
+        gexist = guest_cart2.objects.filter(user_session = guest,productid=product).exists()
         if gexist:
             incart=True
         else:
@@ -527,23 +651,30 @@ def editproduct(request,id):
         prod.productname = request.POST.get('productname')
         prod.price = request.POST.get('price')
         prod.description = request.POST.get('description')
-        prod.category = request.POST.get('category')
-        cateoptions=categories.objects.get(id=prod.category)
+        cat = request.POST.get('category')
+        cateoptions=categories.objects.get(id=cat)
         prod.catid=cateoptions
+        selecat=cateoptions.categoryname
+        prod.category=selecat
         prod.carbrand = request.POST.get('carbrand')
+        prod.stocks = request.POST.get('stock')
         rtrn = request.POST.get('retrn')
         if rtrn:
             prod.retrn = True
         else:
             prod.retrn = False
-        prod.retrn_policy = request.POST.get('retrn_policy')
-        getimage = request.FILES.get('image')
-        existimage = prod.image
-        if getimage:
-            prod.image = getimage
-        else:
-            prod.image = existimage
+        prod.retrn_policy = 7
+        prod.image = request.FILES.get('image')
+        # prod.image2 = request.FILES.get('image2')
+        # prod.image3 = request.FILES.get('image3')
+        # prod.image4 = request.FILES.get('image4')
+        # if getimage:
+            # prod.image = getimage
+        # else:
+            # prod.image = existimage
         prod.save()
+        messages.info(request,"The product details has changed Successfully")
+        return redirect(productlist)
         # product = products.objects.create(productname=productname,price=price,
         # description=description,category=category,carbrand=carbrand)
         # product.save()
@@ -589,6 +720,11 @@ def carbrandman(request):
         exist = carbrands.objects.filter(carbrand=carbr)
         if exist:
             messages.error(request,"already exist!!")
+
+        exist= carbrands.objects.filter(carbrand=carbr)
+        if exist:
+            messages.warning("already exist!!")
+
         else:
             add = carbrands()
             add.carbrand = carbr
@@ -612,9 +748,7 @@ def cartlist(request):
             else:
                 a = a+int(i.productid.price)*int(i.quantity)
     else:
-        guser = request.session.get('guest')
-        cartitems = guest_cart.objects.filter()
-        return render(request,'csrtlist2.html',{'cart':cartitems,'price':a,'logedin':False})
+        return redirect(gcart_view)
     return render(request,'cartlist2.html',{'cart':cartitems,'price':a,'logedin':logedin})
 
 def wishlistt(request):
@@ -656,6 +790,7 @@ def addaddress(request):
             country="india"
             reg=Address.objects.create(user_id=user_id,buyer_name=buyer_name,buyer_phone=buyer_phone,address=address,pincode=pincode,city=city,state=state,country=country)
             reg.save()
+            return redirect(checkout)
         return render(request,'addaddress.html',{'address':address,'logedin':logedin})
 
 def remove_cart(request,id):
@@ -829,7 +964,6 @@ def filter(request,id):
     print("YYYYAAAA",categ.categoryname)
     prod = products.objects.filter(category=categ.categoryname)
     
-
         # prod = products.objects.all()
     p = Paginator(prod, 4)
     page = request.GET.get('page')
@@ -919,19 +1053,19 @@ def sort(request,id):
     if 'search-product' in request.POST:
             q=request.POST['search-product']
             searchwith=Q(Q(productname__icontains=q)|Q(prodbrand__icontains=q))
-            prod=products.objects.filter(searchwith,stock_status=True)
+            prod=products.objects.filter(searchwith)
             print('search function')
             
     else:
         if id == 1:
             print('normal function')
-            prod = products.objects.filter(stock_status=True).order_by('price')
+            prod = products.objects.all().order_by('price')
             for i in prod:
                 print("all prod",i.price )
         elif id == 2:
-            prod = products.objects.filter(stock_status=True).order_by('-price')
+            prod = products.objects.all().order_by('-price')
         else:
-            prod = products.objects.filter(stock_status=True).order_by('-created_at')
+            prod = products.objects.all().order_by('-created_at')
 
     
         # prod = products.objects.all()
@@ -955,6 +1089,7 @@ def cart_update(request):
    print('cart')
    body = json.loads(request.body)
    cartv = cart.objects.get(id=body['cart_id'])
+   print("sda",cartv)
    
    cartv.quantity = body['product_qty']
    cartv.total_price = body['total']
@@ -1098,35 +1233,35 @@ def shopbycategory(request):
 #     return response
 
 
-# def export_to_pdf(request):
-#     total_sales = 0
-#     report = sales_report.objects.all()
-#     sales = OrderProduct.objects.filter(status="OutForDelivery").annotate(Count('id'))
+def export_to_pdf(request):
+     total_sales = 0
+     report = SalesReport.objects.all()
+     sales = OrderProduct.objects.all().annotate(Count('id'))
 
-#     for total_sale in report:
-#         total_sales += total_sale.amount
+     for total_sale in report:
+         total_sales += total_sale.productPrice
 
-#     template_path = 'sales_pdf.html'
-#     context = {
-#         'report':report,
-#         'total_amount':total_sales,
-#     }
+     template_path = 'sales_pdf.html'
+     context = {
+         'report':report,
+         'total_amount':total_sales,
+     }
     
-#     # csv file can also be generated using content_type='application/csv
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+     # csv file can also be generated using content_type='application/csv
+     response = HttpResponse(content_type='application/pdf')
+     response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
 
-#     template = get_template(template_path)
-#     html = template.render(context)
+     template = get_template(template_path)
+     html = template.render(context)
 
-#     # create a pdf
-#     pisa_status = pisa.CreatePDF(
-#         html, dest=response)
-#     # if error then show some funny view
-#     if pisa_status.err:
-#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
+     # create a pdf
+     pisa_status = pisa.CreatePDF(
+         html, dest=response)
+     # if error then show some funny view
+     if pisa_status.err:
+         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
-#     return response
+     return response
 
     #########################################################################################
 
@@ -1208,39 +1343,43 @@ def addoffer(request,id):
     if request.method=='POST':
         disprice = request.POST.get('disprice')
         disperc = request.POST.get('disperc')
-        if disperc:
-                a=int(add.price)*int(disperc)/100
-                print("perc sele",disperc)
-        elif disprice:
-                a=disprice
-                print("price sele",disprice)
-        else:
-                a=0
+        if int(disperc)<=75:
 
-        add.dis_proprice = int(add.price) - int(a)
-        add.dis_applied = True
-        add.save()
-        exist = add.dis_price
-        # existcheck = add.dis_applied
-        # if exist :
-        
-        diis=int(add.price) - int(a)
-        print('exist',exist)
-        print('totdis',add.total_disprice)
-        print("www",a)
-        print("www",diis)
-        
-        if exist:
-            if int(exist) >= diis:
-                add.total_disprice = diis
-                add.save()
-            elif int(exist) <= diis :
-                print("www",a)
-                add.total_disprice = exist
+            if disperc:
+                    a=int(add.price)*int(disperc)/100
+                    print("perc sele",disperc)
+            elif disprice:
+                    a=disprice
+                    print("price sele",disprice)
+            else:
+                    a=0
+
+            add.dis_proprice = int(add.price) - int(a)
+            add.dis_applied = True
+            add.save()
+            exist = add.dis_price
+            # existcheck = add.dis_applied
+            # if exist :
+            
+            diis=int(add.price) - int(a)
+            print('exist',exist)
+            print('totdis',add.total_disprice)
+            print("www",a)
+            print("www",diis)
+            
+            if exist:
+                if int(exist) >= diis:
+                    add.total_disprice = diis
+                    add.save()
+                elif int(exist) <= diis :
+                    print("www",a)
+                    add.total_disprice = exist
+                    add.save()
+            else:
+                add.total_disprice=diis
                 add.save()
         else:
-            add.total_disprice=diis
-            add.save()
+            messages.warning(request,"percentage should be below 75%")
             
     return render (request,'addoffer.html',{'add':add})
 
@@ -1304,7 +1443,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
                 else:
                     for i in data:
@@ -1317,7 +1460,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
             else:
                 messages.warning(request,"Nothing Found!!")
@@ -1341,7 +1488,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
                 else:
                     for i in date_check:
@@ -1354,7 +1505,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
             else:
                 messages.warning(request,"Nothing Found!!")
@@ -1376,7 +1531,13 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
+                    
                     return render(request,'sales_report_.html',context)
                 else:
                     for i in data_range:
@@ -1389,7 +1550,11 @@ def sales_report_date(request):
                         sales.save()
                     sales = SalesReport.objects.all()
                     total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-                    context = { 'sales':sales,'total':total['productPrice__sum']}
+                    p = Paginator(sales, 10)
+                    page = request.GET.get('page')
+                    sales = p.get_page(page)
+                    nums = "a" * sales.paginator.num_pages
+                    context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
                     return render(request,'sales_report_.html',context)
             else:
                 messages.warning(request,"Nothing Found!!")
@@ -1406,7 +1571,11 @@ def sales_report_date(request):
                 sales.save()
             sales = SalesReport.objects.all()
             total = SalesReport.objects.all().aggregate(Sum('productPrice'))
-            context = { 'sales':sales,'total':total['productPrice__sum']}
+            p = Paginator(sales, 10)
+            page = request.GET.get('page')
+            sales = p.get_page(page)
+            nums = "a" * sales.paginator.num_pages
+            context = { 'sales':sales,'total':total['productPrice__sum'],'nums':nums}
             return render(request,'sales_report_.html',context)
 
         else:
@@ -1420,6 +1589,11 @@ def sales_report_date(request):
                 sales.save()
             sales = SalesReport.objects.all()
             total = SalesReport.objects.all().aggregate(Sum('productPrice'))
+
+            p = Paginator(sales, 10)
+            page = request.GET.get('page')
+            sales = p.get_page(page)
+            nums = "a" * sales.paginator.num_pages
             context = { 'sales':sales,'total':total['productPrice__sum']}
             return render(request,'sales_report_.html',context)
         
@@ -1466,40 +1640,41 @@ def export_to_excel(request):
     return response
 
 
-def export_to_pdf(request):
-    prod = products.objects.all()
-    order_count = []
-    # for i in prod:
-    #     count = SalesReport.objects.filter(product_id=i.id).count()
-    #     order_count.append(count)
-    #     total_sales = i.price*count
-    sales = SalesReport.objects.all()
-    total_sales = SalesReport.objects.all().aggregate(Sum('productPrice'))
+# def export_to_pdf(request):
+    # prod = products.objects.all()
+    # order_count = []
+    # # for i in prod:
+    # #     count = SalesReport.objects.filter(product_id=i.id).count()
+    # #     order_count.append(count)
+    # #     total_sales = i.price*count
+    # sales = SalesReport.objects.all()
+    # total_sales = SalesReport.objects.all().aggregate(Sum('productPrice'))
+# 
+# 
+# 
+    # template_path = 'sales_pdf.html'
+    # context = {
+        # 'brand_name':prod,
+        # 'order_count':sales,
+        # 'total_amount':total_sales['productPrice__sum'],
+    # }
+    # 
+    # # csv file can also be generated using content_type='application/csv
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+# 
+    # template = get_template(template_path)
+    # html = template.render(context)
+# 
+    # # create a pdf
+    # pisa_status = pisa.CreatePDF(
+        # html, dest=response)
+    # # if error then show some funny view
+    # if pisa_status.err:
+        # return HttpResponse('We had some errors <pre>' + html + '</pre>')
+# 
+    # return response
 
-
-
-    template_path = 'sales_pdf.html'
-    context = {
-        'brand_name':prod,
-        'order_count':sales,
-        'total_amount':total_sales['productPrice__sum'],
-    }
-    
-    # csv file can also be generated using content_type='application/csv
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-        html, dest=response)
-    # if error then show some funny view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-    return response
 
 
 # guest cart
@@ -1508,7 +1683,7 @@ def add_cart_guest(request,pid):
     if 'guest' in request.session:
         print("guest")
         prod = products.objects.get(id=pid)
-        gcart = guest_cart()
+        gcart = guest_cart2()
         gcart.user_session = request.session['guest']
         gcart.productid = prod
         gcart.quantity = 1
@@ -1521,7 +1696,7 @@ def add_cart_guest(request,pid):
         ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S)) 
         guser_session = str(ran)
         request.session['guest'] = guser_session
-        gcart = guest_cart()
+        gcart = guest_cart2()
         gcart.user_session = guser_session
         gcart.productid = prod
         gcart.quantity = 1
@@ -1532,7 +1707,7 @@ def gcart_view(request):
     logedin = False
     guser = request.session.get('guest')
     print("guser",guser)
-    cart = guest_cart.objects.filter(user_session=guser)
+    cart = guest_cart2.objects.filter(user_session=guser)
     a=0                                                          
     for i in cart:
         if i.productid.total_disprice:
@@ -1547,19 +1722,19 @@ def gcart_view(request):
             return redirect(cartlist)
     return render(request,'cartlist2.html',{'cart':cart,'price':a,'logedin':logedin})
 
-def gcart_update(request):
-   body = json.loads(request.body)
-   cart = guest_cart.objects.get(id=body['cart_id'])
-   cart.quantity = body['product_qty']
-   cart.save()
-   print("cart_test",body)
-   print("update cart")
-   return redirect(gcart_view)
+# def gcart_update(request):
+#    body = json.loads(request.body)
+#    cart = guest_cart2.objects.get(id=body['cart_id'])
+#    cart.quantity = body['product_qty']
+#    cart.save()
+#    print("cart_test",body)
+#    print("update cart")
+#    return redirect(gcart_view)
 
 def gcart_update(request):
    print('cart')
    body = json.loads(request.body)
-   cartv = guest_cart.objects.get(id=body['cart_id'])
+   cartv = guest_cart2.objects.get(id=body['cart_id'])
    
    cartv.quantity = body['product_qty']
    cartv.total_price = body['total']
@@ -1569,6 +1744,7 @@ def gcart_update(request):
    return redirect(cartlist)
 
 def gcart_remove(request,id):
-    gcart = guest_cart.objects.get(id=id)
+    gcart = guest_cart2.objects.get(id=id)
     gcart.delete()
     return redirect(gcart_view)
+

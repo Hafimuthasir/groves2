@@ -8,6 +8,7 @@ from app_ga.views import login
 import datetime
 import json
 import io
+from django.contrib import messages
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.http import JsonResponse
@@ -91,7 +92,7 @@ def checkout(request):
                             minusvalue=coupobj.discount_price
                             coupstat = True
                             copu=coupon
-                            sweetify.success(request,'Coupon applied successfully')
+                            messages.success(request,'Coupon applied successfully')
                             print("copu===",copu)
                             print("jjjj",disprice)
                             request.session['acoupon'] = minusvalue
@@ -106,10 +107,10 @@ def checkout(request):
                             else:
                                 minusvalue = coupobj.discount_price
                         else:
-                            sweetify.error(request,'Minimum amount is Rs.'+str(coupobj.minimum_amount))
+                            messages.error(request,'Minimum amount is Rs.'+str(coupobj.minimum_amount))
                     else:
                         print("dcsdsasdsdsdsdsadsa")
-                        sweetify.error(request,'This Coupon has expired')
+                        messages.error(request,'This Coupon has expired')
                 else:
                     minusvalue = 0
                 # request.session['acoupon'] = minusvalue
@@ -133,7 +134,7 @@ def checkout(request):
                     wall.balance = int(wall.balance)-int(inputwall)
                     request.session['wallet'] = inputwall
                     request.session['awallet'] = a
-                    sweetify.success(request,'Successfully redeemed from wallet')
+                    messages.success(request,'Successfully redeemed from wallet')
                 else:
                     return render(request,'checkout.html',{'cart':cartitems,'total':a,'address':address,'coupstat':coupstat,'subtotal':subtotal,'disprice':disprice,'wallet':wall,'logedin':logedin})
                 print("hihi",coupstat)
@@ -205,7 +206,7 @@ def checkout(request):
                 if payment_method == 'razorpay':
                       return redirect(payment_methods_razorpay, reg.pk)
                 
-                
+                      print("dfs")   
                 return redirect(ordersuccess)
                 # elif payment_method == 'paypal':
 
@@ -443,46 +444,50 @@ def offerbycategory(request):
         disperc = request.POST.get('disperc')
         disprice = request.POST.get('disprice')
         prod = products.objects.filter(catid_id=chose_cate)
-        
-        for i in prod:
-            if disperc:
-                a=int(i.price)*int(disperc)/100
-                print("perc sele",disperc)
-                distype="percentage"
-            elif disprice:
-                a=disprice
-                print("price sele",disprice)
-                distype="flat"
-            else:
-                a=0
-            
-            i.dis_price = int(i.price) - int(a)
-            i.dis_applied = True
-            i.dis_price_type = distype
-            i.save()
-            
-            exist = i.dis_proprice
-            diis = int(i.price)-int(a)
-            if exist:
-                if int(exist) >= int(diis) :
-                    i.total_disprice = diis
-                    
-                    i.save()
-                    
-                elif int(exist) <= diis :
-                    i.total_disprice=exist
-                    i.save()
-            else:
-                i.total_disprice = diis
-                i.save()
-            # if distype == "percentage":
-            #     diperc =  disperc
-            # else :
-            #     c=int(i.price)
-            #     d=int(i.total_disprice)
-            #     e=c-d
-            #     diperc = e/c*(100)
+        if int(disperc)<=75:
+
+            for i in prod:
+                if disperc:
+                    a=int(i.price)*int(disperc)/100
+                    print("perc sele",disperc)
+                    distype="percentage"
+                elif disprice:
+                    a=disprice
+                    print("price sele",disprice)
+                    distype="flat"
+                else:
+                    a=0
                 
+                i.dis_price = int(i.price) - int(a)
+                i.dis_applied = True
+                i.dis_price_type = distype
+                i.save()
+                
+                exist = i.dis_proprice
+                diis = int(i.price)-int(a)
+                if exist:
+                    if int(exist) >= int(diis) :
+                        i.total_disprice = diis
+                        
+                        i.save()
+                        
+                    elif int(exist) <= diis :
+                        i.total_disprice=exist
+                        i.save()
+                else:
+                    i.total_disprice = diis
+                    i.save()
+                # if distype == "percentage":
+                #     diperc =  disperc
+                # else :
+                #     c=int(i.price)
+                #     d=int(i.total_disprice)
+                #     e=c-d
+                #     diperc = e/c*(100)
+
+        else :
+            messages.error(request,"offer should be below 75%")  
+            return redirect (offerbycategory)          
 
     # produ=products.objects.filter(dis_price__gte = 0) 
     produ=products.objects.filter(~Q(dis_price = None) ).distinct('category')

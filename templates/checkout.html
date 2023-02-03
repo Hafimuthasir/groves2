@@ -19,43 +19,55 @@
 </head>
 <body  style="background-color: #eee;">
     {% block content %}
-    <br><br><br>
-    <div class="container-fluid ">
+    
+<br>
+    {% comment %} <div class="container-fluid">
       <p class="mb-1 h4 text-success shadow p-3 mb-5 bg-white rounded" style="padding-left:45%;margin-top:2%;color:blue; text-align:center;">Checkout</p>
-      {% comment %} <p class="mb-0">You have 4 items in your cart</p> {% endcomment %}
-    </div>
+      
+    </div> {% endcomment %}
     <section class="h-100 h-custom" >
-        <div class="container py-5 h-100" >
+      <form method = "POST" class="mt-4">
+        {%csrf_token%}
+        <div class="container-fluid py-5 h-100" >
           <div class="row d-flex justify-content-center align-items-center h-100" >
             {% comment %} <div class="col"> {% endcomment %}
-              <div class="card shadow p-3 mb-5 bg-white rounded" >
+              <text class="font-weight-bold text-info" style="padding-left:48%;font-size:20px;">Checkout</text>
+              <div class="card shadow p-3 mb-5 bg-white rounded " >
                 <div class="card-body p-4">
       
                   <div class="row">
+                    
 
-                    <div class="col">
+                    <div class="col-2 bg-dark rounded text-white overflow-auto" style="height:32rem;">
                       {% comment %} <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                       <hr> {% endcomment %}
       
                       <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                          <form method = "POST" class="mt-4">
-                            {%csrf_token%}
+                          
                             
                           <h4>Saved Addresses</h4><br>
+                           {% if address %}
                               {% for i in address %}  
                               <input type="radio" id="html" name="address" checked value="{{i.id}}">
-                                 <label for="html">{{i.buyer_name}}</label><br>
-                                 <label for="html">{{i.buyer_phone}}</label><br>
-                                 <label for="html">{{i.address}}</label><br>
-                                 <label for="html">{{i.pincode}}</label><br>
-                                 <label for="html">{{i.city}}</label><br>
-                                 <label for="html">{{i.state}}</label><br>
-                                 <label for="html">{{i.country}}</label><br><hr>  
+                                 <text class="font-weight-light">{{i.buyer_name}}</text><br>
+                                 <text class="font-weight-light">{{i.buyer_phone}}</text><br>
+                                  <text class="font-weight-light">{{i.address}}</text><br>
+                                    <text class="font-weight-light">{{i.pincode}}</text><br>
+                                      <text class="font-weight-light">{{i.city}}</text><br>
+                                        <text class="font-weight-light">{{i.state}}</text><br>
+                                          <text class="font-weight-light">{{i.country}}</text><br><hr>  
                                  {% endfor %}
-                                 <a href="{% url 'addaddress' %}">Change Address</a>
+                                
+                                 <a href="{% url 'addaddress' %}" class="btn btn-primary">Change Address</a>
+                                 {% else %}
+                                <p class="text-danger"> You have no saved addresses</p><br>
+                                <a href="{% url 'addaddress' %}"class="btn btn-primary">Add Address</a>
+                                  {% endif %}
+                                 
                                 </div>
+                                
                              
                                 
                           {% comment %} <p class="mb-0">You have 4 items in your cart</p> {% endcomment %}
@@ -65,19 +77,20 @@
                               class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
                         </div> {% endcomment %}
                       </div>
-      
-                    <div class="col-lg-7">
+                      
+                    <div class="col-6 overflow-auto border rounded shadow-sm p-3 mb-5 bg-white rounded" style="height:32rem;padding-left:10px;">
+                      
                       {% comment %} <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                       <hr> {% endcomment %}
       
-                      <div class="d-flex justify-content-between align-items-center mb-4">
-                        
+                      {% comment %} <div class="d-flex justify-content-between align-items-center mb-4"> {% endcomment %}
+
                         {% comment %} <div>
                           <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
                               class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
                         </div> {% endcomment %}
-                      </div>
+                      {% comment %} </div> {% endcomment %}
                       {% for i in cart %}
                       <div class="card mb-3">
                         <div class="card-body">
@@ -98,15 +111,28 @@
                                 <h5 class="fw-normal mb-0"></a>&nbspQty.{{i.quantity}}&nbsp</h5>
                               </div>
                               <div style="width: 80px;">
+                                {% if i.productid.total_disprice%}
                                 <h5 class="mb-0">&nbsp&nbspRs.{{i.productid.total_disprice}}</h5>
+                                {% else %}
+                                <h5 class="mb-0">&nbsp&nbspRs.{{i.productid.price}}</h5>
+                                {% endif %}
                               </div>
                               <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                             </div>
                           </div>
                         </div>
+                      
                       </div>
+                      
                     
                       {% endfor %}
+                      {% if cart_count <= 2 %}
+                      <br><br><br>
+                      <a href="{% url 'index' %}" class="text-muted" style="margin-left:40%;font-size:20px;text-decoration:none;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                      </svg>Add more</a>
+                      
+                      {% endif %}
                       <!-- <div class="card mb-3">
                         <div class="card-body">
                           <div class="d-flex justify-content-between">
@@ -187,11 +213,70 @@
                           </div>
                         </div>
                       </div> -->
-      
+                    </div>
                     
-                    <div class="col">
-      
-                      <div class="card text-white rounded-3" style="background-color:#38393e;">
+                    <div class="col-4">
+                      
+
+                    
+                        <form method = "POST">
+                          {%csrf_token%}
+                          <div class="container" >
+                            <div class="row" >
+                              
+                              {% if coupstat == False %}
+                               <div class="col">
+                          
+                        <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" style="width:100%;" type="text" name="coupon" placeholder="Coupon Code">
+                              </div>
+                              <div class="col">
+                        <div class="flex-c-m stext-101 cl2 size-118 bor13 bg8 bor hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+                          <button type="submit" value="submit" name="coupon_bt">Apply coupon</button>
+                        </form>
+                        </div></div>
+                      </div> 
+                      {% endif %}
+                      {% if coupstat == True %}
+                      <div class="col">
+                      <p style="color:green;">You have already applied a coupon</p>
+                      </div><div class="col">
+                      <a href="#" class="btn btn-primary">Clear Coupon</a>
+                      </div>
+                    </div>
+                      {% endif %}
+                  </div><br>
+                      <div class="col">
+                        {% comment %} <a href="#" class="btn">Redeem Balance from Wallet</a> {% endcomment %}
+                        <div class="form-group row" >
+                          <div class="col-sm-9" >
+                            <div class="form-check" style="margin-left:15%;">
+                              <input id="OtherCheckBox" class="form-check-input" style="margin-left" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
+                              <label class="form-check-label" for="OtherCheckBox">
+                                Redeem from Wallet
+                              </label>
+                            </div>
+                            {% comment %} <label for="OtherCheckBox">Redeem from Wallet</label>
+                            <input id="OtherCheckBox" style="margin-left" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" /></p> {% endcomment %}
+                            
+                            <div id="OtherTextBox" style="display:none">
+                              <p>Available Balance : Rs.{{wallet.balance}} </p>
+                              <label>Enter the amount:</label>
+                              <form method="POST">
+                                {%csrf_token%}
+                            <input class="form-control" name="inputwall" type="text" placeholder="Enter the amount you want to redeem" required /><br>
+                          <button type="submit" class="btn btn-primary" value="submit" name="redeem_bt">Redeem</button>    
+                          </form>
+                          </div>
+                          </div>
+                        </div>
+                      
+                        
+          
+                      </div>
+          
+                        
+
+                      <div class="card text-white rounded-3" style="background-color:#38393e;padding-top:10px;">
                         <div class="card-body">
                           <!-- <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="mb-0">Card details</h5>
@@ -244,7 +329,7 @@
                             </div> {% endcomment %}
                           </div>
                           <br>
-
+                          
 
                           <div class="d-flex justify-content-between">
                             <p class="mb-2">Subtotal</p>
@@ -281,13 +366,22 @@
                             <option value ="razorpay">Razorpay</option>
                             </select>
                           </div>
-
-                           <button type="submit" value="checkbt" name="checkbt" class="btn btn-info btn-block btn-lg">
+							{% if address %}
+                           <button type="submit" value="submit" name="checkbt" class="btn btn-info btn-block btn-lg">
                             <div class="d-flex justify-content-between">
                               <span>₹{{total}}.00</span>
                               <span>Place Order <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                             </div>
-                          </button> 
+                          </button>
+                          {% else %}
+                          <a href="{% url 'addaddress' %}" type="submit" value="checkbt" name="checkbt" class="btn btn-danger btn-block btn-lg">
+                                                      <div class="d-flex justify-content-between">
+                                                        <span>₹{{total}}.00</span>
+                                                        <span>Add address to Place Order <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                                      </div>
+                                                    </a>
+                           
+                          {% endif %}
 
                         </form>
 
@@ -382,8 +476,8 @@
                 </div>
               </div>
             </div>
-
-            <div class="flex-w flex-m m-r-20 m-tb-5 shadow p-3 mb-5 bg-white rounded"style="background-color:grey;">
+{% comment %} 
+            <div class="flex-w flex-m m-r-20 m-tb-5 shadow p-3 mb-5 bg-white rounded"style="background-color:#38393e;">
               <form method = "POST">
                 {%csrf_token%}
                 <div class="container" >
@@ -410,20 +504,20 @@
           </div>
             {% endif %}
         </div><br>
-            <div class="col">
+            <div class="col"> {% endcomment %}
               {% comment %} <a href="#" class="btn">Redeem Balance from Wallet</a> {% endcomment %}
-              <div class="form-group row" >
+              {% comment %} <div class="form-group row" >
                 <div class="col-sm-9" >
                   <div class="form-check" style="margin-left:15%;">
                     <input id="OtherCheckBox" class="form-check-input" style="margin-left" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
                     <label class="form-check-label" for="OtherCheckBox">
                       Redeem from Wallet
                     </label>
-                  </div>
+                  </div> {% endcomment %}
                   {% comment %} <label for="OtherCheckBox">Redeem from Wallet</label>
                   <input id="OtherCheckBox" style="margin-left" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" /></p> {% endcomment %}
                   
-                  <div id="OtherTextBox" style="display:none">
+                  {% comment %} <div id="OtherTextBox" style="display:none">
                     <p>Available Balance : Rs.{{wallet.balance}} </p>
                     <label>Enter the amount:</label>
                     <form method="POST">
@@ -433,7 +527,7 @@
                 </form>
                 </div>
                 </div>
-              </div>
+              </div> {% endcomment %}
             
               
 

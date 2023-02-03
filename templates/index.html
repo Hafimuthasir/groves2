@@ -61,7 +61,7 @@
                 </div>
                   
                 <div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-                  <a href="product.html" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                  <a href="#" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                     Shop Now
                   </a>
                 </div>
@@ -232,7 +232,13 @@
               <div class="block2 shadow p-3 mb-5 bg-body rounded" style="height:23rem;">
                 
                 <div class="block2-pic hov-img0 ">
-                <a href="detail/{{i.products.id}}">	<img src="{{i.products.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT"></a>
+                <a href="detail/{{i.products.id}}">	
+                  {% if i.products.image %}
+                  <img src="{{i.products.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT">
+                  {% else %}
+                  <p>image not available</p>
+                  {% endif %}
+                </a>
     
                   {% comment %} <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                     Quick View
@@ -241,9 +247,9 @@
     
                 <div class="block2-txt flex-w flex-t p-t-14">
                   <div class="block2-txt-child1 flex-col-l ">
-                    <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                    <p class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                       {{i.products.productname}}
-                    </a>
+                    </p>
                     {% if i.products.total_disprice is None %}
                     <span class="stext-105 cl3">
                       Rs.{{i.products.price}}
@@ -258,7 +264,7 @@
                       Rs.{{i.products.total_disprice}} 
                       
                     </span>
-                    &nbsp<span class="badge badge-success">{{i.products.disperc}}% off</span>
+                    {% comment %} &nbsp<span class="badge badge-success">{{i.products.disperc}}% off</span> {% endcomment %}
                   </div>
                     {% endif %}
                     
@@ -494,8 +500,9 @@
 					<div class="block2 shadow p-3 mb-5 bg-body rounded" style="height:23rem;">
             
 						<div class="block2-pic hov-img0 ">
+						{% if i.image %}
 						<a href="detail/{{i.id}}">	<img src="{{i.image.url}}" height="200px" width="200px" alt="IMG-PRODUCT"></a>
-
+						{% endif %}
 							{% comment %} <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
 								Quick View
 							</a> {% endcomment %}
@@ -503,9 +510,9 @@
 
 						<div class="block2-txt flex-w flex-t p-t-14">
 							<div class="block2-txt-child1 flex-col-l ">
-								<a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<p class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 									{{i.productname}}
-								</a>
+								</p>
                 {% if i.total_disprice is None %}
 								<span class="stext-105 cl3">
 									Rs.{{i.price}}
@@ -602,8 +609,8 @@
                         <img src={{i.image}} style="height:200px; width:220px;" alt=""></a>
                     </div>
                     
-                    <h5><a href="" style="color:grey;">{{i.carbrand}}</a></h5>
-                    <h5><a href="">{{i.productname}}</a></h5>
+                    <h5>{{i.carbrand}}</h5>
+                    <h5>{{i.productname}}</h5>
                     <div class="product-carousel-price">
                         <a>Rs.{{i.price}}.00</a> <del>Rs.3500.00</del>
                     </div>  

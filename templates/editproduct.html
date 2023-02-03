@@ -82,7 +82,7 @@
                   <div class="card-body">
                     <h4 class="card-title">Update Product Details :</h4>
                     <p class="card-description">  </p>
-                    <form method = 'POST' class="forms-sample">
+                    <form method = 'POST' class="forms-sample"  enctype="multipart/form-data">
                       {%csrf_token%} 
                       <div class="form-group row">
                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Product Name</label>
@@ -105,7 +105,7 @@
                       <div class="form-group row">
                         <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Stock</label>
                         <div class="col-sm-9">
-                          <input type="number" class="form-control" name="stock" value="{{prod.stock}}" required id="exampleInputPassword2" placeholder="Enter the stock in number">
+                          <input type="number" class="form-control" name="stock" value="{{prod.stocks}}" required id="exampleInputPassword2" placeholder="Enter the stock in number">
                         </div>
                       </div>
                       <div class="form-group row">
@@ -113,8 +113,9 @@
                         <div class="col-sm-9">
 
                           Return Available ? : <input id="OtherCheckBox" name="retrn" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
-                          <input id="OtherTextBox" class="form-control" name="retrn_policy" type="text" placeholder="Enter the Return Period" required style="display:none" />
-                      
+                          <div id="OtherTextBox" style="display:none">
+                            <label class="text-muted">Return-policy is 7 days</label>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group row">
@@ -140,14 +141,14 @@
                           <label>Brand List :</label>
                         <select name="productbrand" class="form-control" id="exampleFormControlSelect1 Hider1" style="display:block">
                           {% for i in prodbrand %}
-                          <option value="{{i.id}}">{{i.productbrand}}
+                          <option value="{{i.productbrand}}">{{i.productbrand}}
                           </option>
                           {% endfor %}
                         </select>
-                    
+                    {% comment %}                     
                         Other Brand : <input id="OtherCheckBox2" name="othbr" type="checkbox" value="True" onchange="javascript:toggleOtherTextboxVisible()" />
-                          <input id="OtherTextBox2" class="form-control" name="other_brand" type="text" placeholder="Enter the Brand name" required style="display:none" />
-                      
+                          <input id="OtherTextBox2" class="form-control" name="other_brand" type="text" placeholder="Enter the Brand name" style="display:none" />
+                       {% endcomment %}
                         </div>
                       </div>
                       
@@ -201,8 +202,12 @@
                 </div>
               </div>
 
-              <script defer src="https://cdn.crop.guide/loader/l.js?c=NMYQYH"></script>
               
+              
+
+
+
+              <script defer src="https://cdn.crop.guide/loader/l.js?c=WKCBJD"></script>
               <script type="text/javascript">
 
                 function toggleOtherTextboxVisible()

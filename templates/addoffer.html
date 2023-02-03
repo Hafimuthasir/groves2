@@ -26,8 +26,8 @@
       </div>
     <div class="col d-flex" style="align-items:center;justify-content:center;">
       {% if add.total_disprice %}
-      <div style="background-color:blue;" class="shadow p-3 mb-5 bg-danger rounded">
-      <h6 style="text-align:center;" class="text-white">If multiple offers applied on a product<br>The best offer will be active.</h6>
+      <div style="background-color:blue;" class="shadow p-3 mb-5 bg-dark rounded">
+      <h6 style="text-align:center;" class="text-white">If multiple offers applied on a product<br>The best offer will be active.<text class="text-danger">*<text></h6>
       </div>
       {% endif %}
     </div>
@@ -59,7 +59,7 @@
             <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Add Discount By :</label>
             <div class="col-sm-9">
 
-              Percentage : <input class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" />
+              Percentage : <input class="form-control" reqiured name="disperc" type="text" placeholder="Enter Discount Percentage" />
           
               
           
@@ -121,7 +121,31 @@
   {% comment %} <a href="{% url 'clear_cate_offer' add.id %}" class="btn btn-warning">Clear category offer on this product</a> {% endcomment %}
   {% endif %}
   {% if add.dis_proprice %}
-  <a href="{% url 'clear_pro_offer' add.id %}" class="btn btn-info">Clear product offer on this product</a>
+  {% comment %} <a href="{% url 'clear_pro_offer' add.id %}" class="btn btn-info">Clear product offer on this product</a> {% endcomment %}
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal2">
+    Clear Product offer on this product
+  </button>
+  
+  <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure want to remove ?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         Product offer will be removed
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+          <a href="{% url 'clear_pro_offer' add.id %}" class="btn btn-danger">Clear</a>
+        </div>
+      </div>
+    </div>
+  </div>
   {% endif %}
   <script type="text/javascript">
 
@@ -150,4 +174,10 @@
     }
 </script>
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  {% for i in messages %}
+  swal('',"{{i}}","warning");
+{% endfor %}
+</script>
 {% endblock %}

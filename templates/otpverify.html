@@ -37,12 +37,12 @@
         <div class="form">
           <form class="login-form" method="POST">
             {%csrf_token%}
-            <img src="{% static './images/banner3.jpg' %}" height="100px" width="100px"><br>
             <br>
             {% comment %} <input type="text" placeholder="username" name="username"/> {% endcomment %}
             {% csrf_token %}
             <input type="text" name="otp" placeholder="Enter your OTP" required>
             <input type="submit">
+            
             
             <p class="message"> <a href={% url 'login' %}>Login Using password</a></p>
             <p class="message">Not registered? <a href={% url 'register' %}>Create an account</a></p>

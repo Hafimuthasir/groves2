@@ -43,7 +43,6 @@ class carbrands(models.Model):
       def __str__(self):
           return self.carbrand
 
-
 class products(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     productname = models.CharField(max_length=100)
@@ -80,11 +79,8 @@ class cart(models.Model):
     quantity = models.CharField(max_length=100)
     total_price = models.CharField(max_length=100)
 
-class guest_cart(models.Model):
-    user_session=models.CharField(max_length=20)
-    productid = models.ForeignKey(products,on_delete=models.CASCADE,null=True)
-    quantity = models.CharField(max_length = 100)
-    total_price = models.CharField(max_length = 100, null=True)
+
+
 
 class wishlist(models.Model):
     userid = models.ForeignKey(myusers, on_delete=models.CASCADE,null=True)
@@ -100,6 +96,13 @@ class Address(models.Model):
       city=models.CharField(max_length=50)
       state=models.CharField(max_length=30)
       country=models.CharField(max_length=50)
+
+    
+class guest_cart2(models.Model):
+    user_session=models.CharField(max_length=20)
+    productid = models.ForeignKey(products,on_delete=models.CASCADE,null=True)
+    quantity = models.CharField(max_length = 100)
+    total_price = models.CharField(max_length = 100, null=True)
 
 class Coupon(models.Model):
     coupon_number = models.CharField(max_length=16)

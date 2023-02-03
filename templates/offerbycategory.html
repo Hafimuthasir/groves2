@@ -27,7 +27,7 @@
 
               {% comment %} <input id="OtherCheckBox" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" /> {% endcomment %}
               {% comment %} Price : <input id="OtherCheckBox2" name="distype" type="radio" value="True" onchange="javascript:toggleOtherTextboxVisible()" /> {% endcomment %}
-              Percentage : <input id="OtherTextBox" class="form-control" name="disperc" type="text" placeholder="Enter Discount Percentage" />
+              Percentage : <input id="OtherTextBox" class="form-control" name="disperc" required type="text" placeholder="Enter Discount Percentage" />
           
               
               {% comment %} <input id="OtherTextBox2" class="form-control" name="disprice" type="text" placeholder="Enter the Discount Price" style="display:none" /> {% endcomment %}
@@ -118,6 +118,13 @@
                 document.getElementById('OtherTextBox2').style.display = 'none';
 
     }
+</script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  {% for i in messages %}
+  swal('',"{{i}}","warning");
+{% endfor %}
 </script>
 
 {% endblock %}

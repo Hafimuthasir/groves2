@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-import sweetify
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CSRF_TRUSTED_ORIGINS = ["https://www.grovesautoparts.ga","https://grovesautoparts.ga"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-*s63937d+z8rrcd5jk$ech56addai)_)#jn%tm#$73@6ui%!lx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app_ga.contextprocessor.counter'
             ],
         },
     },
@@ -135,18 +136,16 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_TOKEN = "a8ec68c50e6a068f7d47bcc038979ba3"
+AUTH_TOKEN = config("AUTH_TOKEN")
+ACCOUNT_SID = config("ACCOUNT_SID")
+SERVICE_ID = config("SERVICE_ID")
+
+# AUTH_TOKEN = "2225214cae466f796f57f1303c3f3438"
 # ACCOUNT_SID = "ACf09abc09102db9662b14701508d05275"
-# SERVICE_ID = "MG7582e7cb07baa29209fce5762c1a8549"
-# COUNTRY_CODE = "+91"
+# SERVICE_ID = "VA64b15cf8d416454ae90e6f3a6cb1ab57"
+
+COUNTRY_CODE = "+91"
 
 
 
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert'
-
-sweetify.DEFAULT_OPTS = {
-    'showConfirmButton': False,
-    'timer': 2500,
-    'allowOutsideClick': True,
-    'confirmButtonText': 'OK',
-}
