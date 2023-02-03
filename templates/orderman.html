@@ -32,7 +32,7 @@
                     {% comment %} <th scope="col">Image</th> {% endcomment %}
                     <th scope="col">Category</th>
                     <th scope="col">Order Status</th>
-                    <th scope="col">Order Details</th>
+                    <th scope="col">Details & Updates</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@
                       
                     </td>
                     {% comment %} <td><a href="{% url 'editproduct' i.id %}">edit</a></td> {% endcomment %}
-                    <td><a href="{% url 'updateproduct' i.id %}">Details</a></td>
+                    <td><a href="{% url 'updateproduct' i.id %}">Update Status</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
