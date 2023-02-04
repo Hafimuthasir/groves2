@@ -161,12 +161,12 @@ button{
         <input type="password" placeholder="Password" id="password">
     </div> -->
 
-        <div class="col-6"><input type="textfield" placeholder="firstname" id="username" name="firstname"></div>
-        <div class="col-6"><input type="textfield" placeholder="lastname" id="username" name="lastname"></div>
+        <div class="col-6"><input type="textfield" placeholder="firstname" id="username" name="firstname" required></div>
+        <div class="col-6"><input type="textfield" placeholder="lastname" id="username" name="lastname" required></div>
         <div class="col-6"><input type="textfield" placeholder="username" id="username" name="username" required></div>
-        <div class="col-6"><input type="textfield" placeholder="email" id="your_email" name="email" required ></div>
-        <div class="col-12"><input type="tel" placeholder="enter your phonenumber [10 digits] " id="username" name="phonenumber" pattern="[0-9]{10}" required></div>
-        <div class="col-6"><input type="password" placeholder="password" id="password" name="password" required></div>
+        <div class="col-6"><input type="email" placeholder="email" id="your_email" name="email" required ></div>
+        <div class="col-12"><input type="tel" placeholder="enter your phonenumber" title="Should be 10  digits number" id="username" name="phonenumber" pattern="[0-9]{10}" required></div>
+        <div class="col-6"><input type="password" placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" id="password" name="password" required></div>
         <div class="col-6"><input type="password" placeholder="comfirm password" id="comfirm_password"name="password2" required></div><br>
         <div class="col-12"><input type="textfield" placeholder="Refferal code(optional)" id="refferal"name="refferal"></div>
         <p>Already a user ?<a href="{% url 'login' %}">Login</a></p>
